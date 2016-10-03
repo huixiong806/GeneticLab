@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="win32">
+      <UniqueIdentifier>{84a8ebd7-7cf0-47f6-b75e-d441df67da40}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="resource">
+      <UniqueIdentifier>{715254bc-d70b-4ec5-bf29-467dd3ace079}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Bloop">
+      <UniqueIdentifier>{387c1fca-db2b-4378-acc3-72e5701212cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\DNA">
+      <UniqueIdentifier>{d168ecc9-9155-4d6e-86cd-dce1d50be00d}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Food.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Entity.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\PerlinNoise.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Bloop.cpp">
+      <Filter>src\Bloop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Floop.cpp">
+      <Filter>src\Bloop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Gloop.cpp">
+      <Filter>src\Bloop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\DNA.cpp">
+      <Filter>src\DNA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\GloopDNA.cpp">
+      <Filter>src\DNA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\FloopDNA.cpp">
+      <Filter>src\DNA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Sloop.cpp">
+      <Filter>src\Bloop</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\SloopDNA.cpp">
+      <Filter>src\DNA</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\publicVars.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="main.h">
+      <Filter>win32</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\HelloWorldScene.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Food.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PerlinNoise.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Bloop.h">
+      <Filter>src\Bloop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Floop.h">
+      <Filter>src\Bloop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Gloop.h">
+      <Filter>src\Bloop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\DNA.h">
+      <Filter>src\DNA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\GloopDNA.h">
+      <Filter>src\DNA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\FloopDNA.h">
+      <Filter>src\DNA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Sloop.h">
+      <Filter>src\Bloop</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\SloopDNA.h">
+      <Filter>src\DNA</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\publicVars.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="game.rc">
+      <Filter>resource</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>
