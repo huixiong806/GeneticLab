@@ -86,52 +86,37 @@ bool World::init()
 }
 void World::eventProcessor(float dt)
 {
+	auto director = Director::getInstance();
+	auto glview = director->getOpenGLView();
 	const Vec2 deltaPos[4] = { Vec2(0,1),Vec2(0,-1), Vec2(-1,0), Vec2(1,0) };
 	//移动视野
 	for (int i = 0; i <= 3; i++)
-		if (keyGroupCamera[i])camera += deltaPos[i]*(int)(publicVars::glview->getDesignResolutionSize().width/204.8);
+		if (keyGroupCamera[i])camera += deltaPos[i]*(int)(glview->getDesignResolutionSize().width/204.8);
 	//清除死亡的bloop
-	int bloopSize = bloop.size();
-	for (int i = 0; i < bloopSize; i++)
+	for (auto iter = bloop.begin(); iter != bloop.end();)
 	{
-		if (bloop[i]->die)
+		if ((*iter)->die)
 		{
-			delete bloop[i];
-			bloop.erase(bloop.begin() + i);
-			if (i)i--;
-			bloopSize--;
+			delete *iter;
+			iter = bloop.erase(iter);
 		}
+		else ++iter;
 	}
 	//每个bloop执行tick动作
-	bloopSize = bloop.size();
-	for (int i = 0; i < bloopSize; i++)
-	{
-		bloop[i]->tick(*this);
-	}
-	////生成食物
-	//float randomNumber = random<float>(0, 1);
-	//if (randomNumber < 0.00025)
-	//{
-	//	food.resize(food.size() + 1);
-	//	food[food.size() - 1] = new Food(*this, 1);
-	//	food[food.size() - 1]->setPosition(getPosition());
-	//}
+	for (auto &i : bloop)
+		i->tick(*this);
 	//绘制食物
-	int foodSize = food.size();
-	for (int i = 0; i < foodSize; i++)
-	{
-		food[i]->refreshPosition(camera);
-	}
+	for (auto &i : food)
+		i->refreshPosition(camera);
 	//数据统计输出,20s进行一次
 	if (statCD == 0)
 	{
 		statCD = 999;
 		int GloopCount=0, FloopCount=0, SloopCount=0;
-		bloopSize = bloop.size();
-		for (int i = 0; i < bloopSize; i++)
+		for (auto &i:bloop)
 		{
-			if (bloop[i]->die)continue;
-			switch (bloop[i]->bloopType)
+			if (i->die)continue;
+			switch (i->bloopType)
 			{
 			case BloopType::gloop:
 				GloopCount++;
@@ -144,7 +129,7 @@ void World::eventProcessor(float dt)
 				break;
 			}
 		}
-		dataOutPut << tick << "," << foodSize <<",";
+		dataOutPut << tick << "," << food.size() <<",";
 		dataOutPut << GloopCount << "," << FloopCount << "," << SloopCount << endl;
 	}
 	else statCD--;
@@ -173,6 +158,9 @@ void World::onKeyReleased(EventKeyboard::KeyCode keyCode, Event* event)
 ************************************************/
 void World::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 {
+	auto director = Director::getInstance();
+	auto glview = director->getOpenGLView();
+	Size curResolutionSize = glview->getDesignResolutionSize();
 	if (keyCode == EventKeyboard::KeyCode::KEY_UP_ARROW)  //方向上键
 		keyGroupCamera[0] = true;
 	else if (keyCode == EventKeyboard::KeyCode::KEY_DOWN_ARROW)  //方向下键
@@ -183,21 +171,18 @@ void World::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 		keyGroupCamera[3] = true;
 	else if (keyCode == EventKeyboard::KeyCode::KEY_F)  //F键，增大screensize
 	{
-		Size curSize = publicVars::glview->getDesignResolutionSize();
-		if (curSize.height < 8192)
-			publicVars::glview->setDesignResolutionSize(curSize.width+512, curSize.height+384, ResolutionPolicy::NO_BORDER);
-		curSize = publicVars::glview->getDesignResolutionSize();
-		backGround->setScale(curSize.width/backGround->getContentSize().width);
-		backGround->setPosition(curSize / 2);
-	
+		if (curResolutionSize.height < 8192)
+			glview->setDesignResolutionSize(curResolutionSize.width+512, curResolutionSize.height+384, ResolutionPolicy::NO_BORDER);
+		curResolutionSize = glview->getDesignResolutionSize();
+		backGround->setScale(curResolutionSize.width/backGround->getContentSize().width);
+		backGround->setPosition(curResolutionSize / 2);
 	}
 	else if (keyCode == EventKeyboard::KeyCode::KEY_D)  //D键，减小screensize
 	{
-		Size curSize = publicVars::glview->getDesignResolutionSize();
-		if (curSize.height > 512)
-			publicVars::glview->setDesignResolutionSize(curSize.width-512, curSize.height-384, ResolutionPolicy::NO_BORDER);
-		curSize = publicVars::glview->getDesignResolutionSize();
-		backGround->setScale(curSize.width / backGround->getContentSize().width);
-		backGround->setPosition(curSize / 2);
+		if (curResolutionSize.height > 512)
+			glview->setDesignResolutionSize(curResolutionSize.width-512, curResolutionSize.height-384, ResolutionPolicy::NO_BORDER);
+		curResolutionSize = glview->getDesignResolutionSize();
+		backGround->setScale(curResolutionSize.width / backGround->getContentSize().width);
+		backGround->setPosition(curResolutionSize / 2);
 	}
 }

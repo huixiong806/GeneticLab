@@ -60,7 +60,9 @@
     <ClCompile Include="..\Classes\SloopDNA.cpp">
       <Filter>src\DNA</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\publicVars.cpp" />
+    <ClCompile Include="..\Classes\publicVars.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">

@@ -52,8 +52,6 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // Set the design resolution
 	glview->setDesignResolutionSize(largeResolutionSize.width, largeResolutionSize.height, ResolutionPolicy::NO_BORDER);
-	publicVars::director = director;
-	publicVars::glview = glview;
 	Size frameSize = glview->getFrameSize();
 
     // create a scene. it's an autorelease object
