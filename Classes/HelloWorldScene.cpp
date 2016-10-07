@@ -30,34 +30,21 @@ bool World::init()
     {
         return false;
     }
-    
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	srand((unsigned)time(NULL));
-    //auto label = Label::createWithTTF("Hello World", "fonts/Marker Felt.ttf", 24);
-    //
-    //// position the label on the center of the screen
-    //label->setPosition(Vec2(origin.x + visibleSize.width/2,
-    //                        origin.y + visibleSize.height - label->getContentSize().height));
-
-    //// add the label as a child to this layer
-    //this->addChild(label, 1);
-	bloop.resize(60);
-	food.resize(700);
 	//初始化食物
-	for (int i = 0; i < food.size(); i++)
-	{
-		food[i] = new Food(*this, 1);
-	}
+	for (int i = 0; i < 700; i++)
+		food.emplace_back(make_shared<Food>(*this, 1));
 	//初始化bloops
-	for (int i = 0; i < bloop.size(); i++)
+	for (int i = 0; i < 60; i++)
 	{
-		if(i<3)
-			bloop[i] = new Sloop(*this, 1);
-		else if (i<17)
-			bloop[i] = new Floop(*this, 1);
+		if(i<2)
+			bloop.emplace_back(make_shared<Sloop>(*this, 1));
+		else if (i<11)
+			bloop.emplace_back(make_shared<Floop>(*this, 1));
 		else 
-			bloop[i] = new Gloop(*this, 1);
+			bloop.emplace_back(make_shared<Gloop>(*this, 1));
 	}
 	camera = Vec2(0, 0);
 	for (int i = 0; i <= 3; i++)
@@ -68,7 +55,7 @@ bool World::init()
 	keyListener->onKeyPressed = CC_CALLBACK_2(World::onKeyPressed, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
 	backGround = Sprite::create("images\\White.png");
-	backGround->setColor(Color3B(255,255,255));
+	backGround->setColor(Color3B::WHITE);
 	backGround->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	this->addChild(backGround, 0);
 	statCD = 0;
@@ -96,22 +83,19 @@ void World::eventProcessor(float dt)
 	for (auto iter = bloop.begin(); iter != bloop.end();)
 	{
 		if ((*iter)->die)
-		{
-			delete *iter;
 			iter = bloop.erase(iter);
-		}
 		else ++iter;
 	}
 	//每个bloop执行tick动作
-	for (auto &i : bloop)
-		i->tick(*this);
+	for (int i = 0; i < bloop.size(); ++i)
+		bloop[i]->tick(*this);
 	//绘制食物
 	for (auto &i : food)
 		i->refreshPosition(camera);
 	//数据统计输出,20s进行一次
 	if (statCD == 0)
 	{
-		statCD = 999;
+		statCD = 499;
 		int GloopCount=0, FloopCount=0, SloopCount=0;
 		for (auto &i:bloop)
 		{
@@ -119,13 +103,13 @@ void World::eventProcessor(float dt)
 			switch (i->bloopType)
 			{
 			case BloopType::gloop:
-				GloopCount++;
+				++GloopCount;
 				break;
 			case BloopType::floop:
-				FloopCount++;
+				++FloopCount;
 				break;
 			case BloopType::sloop:
-				SloopCount++;
+				++SloopCount;
 				break;
 			}
 		}
@@ -133,7 +117,7 @@ void World::eventProcessor(float dt)
 		dataOutPut << GloopCount << "," << FloopCount << "," << SloopCount << endl;
 	}
 	else statCD--;
-	tick++;
+	++tick;
 }
 /************************************************
 函数名:键盘释放事件

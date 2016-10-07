@@ -15,7 +15,7 @@ void Gloop::init(Layer& layer, int ZOrder)
 	speed = speedCalcPrmA+size.width*speedCalcPrmB;
 	noise.seed = rand() % 2147483648;
 	noise.amplitude = 1;
-	noise.frequency = 0.005*(speed);
+	noise.frequency = 0.0025*(speed);
 	noiseX = 0;
 	cycle = maxCycle/4;
 	die = false;
@@ -31,7 +31,13 @@ void Gloop::tick(World& world)
 	//移动
 	move();
 	//增加cycle
-	cycle += cycleIncPerTick;
+	int gloopCount = 0;
+	for (auto i : world.bloop)
+	{
+		if (i->bloopType == BloopType::gloop)
+			++gloopCount;
+	}
+	cycle += publicVars::sunEnergyPerTick / gloopCount;
 	//绘制
 	refreshPosition(world.camera);
 	//掉落食物
@@ -39,25 +45,25 @@ void Gloop::tick(World& world)
 	if (randomNumber < FoodProvideRatePerTick())
 	{
 		cycle -= Food::energy/publicVars::energyTransferEfficiency;
-		world.food.resize(world.food.size() + 1);
-		world.food[world.food.size() - 1] = new Food(world, 1);
-		world.food[world.food.size() - 1]->setPosition(getPosition());
+		world.food.emplace_back(std::make_shared<Food>(world, 1));
+		(*(world.food.end()-1))->setPosition(getPosition());
 	}
 	//分裂
 	if (cycle >= maxCycle)
 	{
 		die = true;
-		world.bloop.resize(world.bloop.size() + 2);
-		world.bloop[world.bloop.size() - 2] = new Gloop(world, 1,*this);
-		world.bloop[world.bloop.size() - 2]->setPosition(getPosition());
-		world.bloop[world.bloop.size() - 1] = new Gloop(world, 1, *this);
-		world.bloop[world.bloop.size() - 1]->setPosition(getPosition());
+		for (int i = 0; i < 2;++i)
+		{
+			world.bloop.emplace_back(std::make_shared<Gloop>(world, 1,*this));
+			(*(world.bloop.end() - 1))->setPosition(getPosition());
+		}
 	}
 }
 Gloop::Gloop(Layer& layer, int ZOrder)
 {
 	dna = GloopDNA();
 	init(layer, ZOrder);
+	cycle = random<int>(maxCycle * 1 / 6, maxCycle * 1 / 4);
 }
 Gloop::Gloop(Layer& layer, int ZOrder, Gloop& parent)
 {

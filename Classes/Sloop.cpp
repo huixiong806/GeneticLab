@@ -15,7 +15,7 @@ void Sloop::init(Layer& layer, int ZOrder)
 	speed = speedCalcPrmA+size.width*speedCalcPrmB;
 	noise.seed = rand() % 2147483648;
 	noise.amplitude = 1;
-	noise.frequency = 0.005*(speed);
+	noise.frequency = 0.0025*(speed);
 	noiseX = 0;
 	cycle = maxCycle/6;
 	eatCD = 0;
@@ -39,28 +39,25 @@ void Sloop::tick(World& world)
 	//绘制
 	refreshPosition(world.camera);
 	//吃食物
-	int foodSize = world.food.size();
-	for (int i = 0; i < foodSize;i++)
+	for (auto iter = world.food.begin(); iter != world.food.end();)
 	{
-		if (hit(*world.food[i]))
+		if (hit(**iter))
 		{
 			cycle += Food::energy;
-			delete world.food[i];
-			world.food.erase(world.food.begin()+i);
-			break;
+			iter = world.food.erase(iter);
 		}
+		else ++iter;
 	}
 	//吃floop和gloop
 	if (!eatCD)
 	{ 
-		int bloopSize = world.bloop.size();
-		for (int i = 0; i < bloopSize; i++)
+		for (auto iter = world.bloop.begin();iter != world.bloop.end();++iter)
 		{
-			if ((world.bloop[i]->bloopType == BloopType::floop || world.bloop[i]->bloopType == BloopType::gloop)&& hit(*world.bloop[i])&&size.width>world.bloop[i]->getSize().width)
+			if (((*iter)->bloopType == BloopType::floop || (*iter)->bloopType == BloopType::gloop) && hit(**iter) && size.width>(*iter)->getSize().width)
 			{
-				world.bloop[i]->die = true;
-				cycle += world.bloop[i]->cycle*publicVars::energyTransferEfficiency;
-				eatCD = world.bloop[i]->bloopType == BloopType::floop ? 500:250;
+				(*iter)->die = true;
+				cycle += (*iter)->cycle*publicVars::energyTransferEfficiency;
+				eatCD = (*iter)->bloopType == BloopType::floop ? 500 : 250;
 				break;
 			}
 		}
@@ -69,17 +66,18 @@ void Sloop::tick(World& world)
 	if (cycle >= maxCycle)
 	{
 		die = true;
-		world.bloop.resize(world.bloop.size() + 2);
-		world.bloop[world.bloop.size() - 2] = new Sloop(world, 1,*this);
-		world.bloop[world.bloop.size() - 2]->setPosition(getPosition());
-		world.bloop[world.bloop.size() - 1] = new Sloop(world, 1, *this);
-		world.bloop[world.bloop.size() - 1]->setPosition(getPosition());
+		for (int i = 0; i < 2; ++i)
+		{
+			world.bloop.emplace_back(std::make_shared<Sloop>(world, 1, *this));
+			(*(world.bloop.end() - 1))->setPosition(getPosition());
+		}
 	}
 }
 Sloop::Sloop(Layer& layer, int ZOrder)
 {
 	dna = SloopDNA();
 	init(layer, ZOrder);
+	cycle = random<int>(maxCycle * 1 / 6, maxCycle*1/4);
 }
 Sloop::Sloop(Layer& layer, int ZOrder, Sloop& parent)
 {

@@ -19,10 +19,10 @@ public:
 	virtual void tick(World& world);
 private:
 	FloopDNA dna;
-	//size的32~287线性映射到speed的5~1
+	//size的32~287线性映射到speed的10~2
 	//根据size计算速度的参数A和B，speed=A+B*size
-	const float speedCalcPrmA = 5.502;
-	const float speedCalcPrmB = -0.0157;
+	const float speedCalcPrmA = 11.004;
+	const float speedCalcPrmB = -0.0314;
 	//tick的cycle增长速度
 	const float cycleIncPerTick = -0.03;
 	//进食周期,20秒钟(1000ticks)可以进食一次

@@ -2,7 +2,6 @@
 #define ENTITY_H
 #include "cocos2d.h"
 #include "publicVars.h"
-using namespace cocos2d;
 enum class Shape : int
 {
 	circle,
@@ -13,24 +12,24 @@ class Entity
 public:
 	Entity();
 	virtual ~Entity();
-	void initSprite(Layer &layer, std::string picturePath, int ZOrder);
+	void initSprite(cocos2d::Layer &layer, std::string picturePath, int ZOrder);
 	void setRandomColor();
-	void setColor(Color3B color);
-	void setPosition(Vec2 position_);
-	void setRandomPosition(Vec2 startPoint,Size mapSize);
-	void setSize(Size size_);
+	void setColor(cocos2d::Color3B color);
+	void setPosition(cocos2d::Vec2 position_);
+	void setRandomPosition(cocos2d::Vec2 startPoint, cocos2d::Size mapSize);
+	void setSize(cocos2d::Size size_);
 	void setShape(Shape shape_);
-	virtual void refreshPosition(Vec2 camera_);
+	virtual void refreshPosition(cocos2d::Vec2 camera_);
 	virtual bool hit(Entity& another);
 	const Shape& getShape();
-	const Size& getSize();
-	const Vec2& getPosition();
+	const cocos2d::Size& getSize();
+	const cocos2d::Vec2& getPosition();
 protected:
-	Vec2 position;
+	cocos2d::Vec2 position;
 	//对于圆，直径。对于正方体，边长。
-	Size size;
+	cocos2d::Size size;
 	float speed;
-	Sprite* sprite;
+	cocos2d::Sprite* sprite;
 	Shape shape;
 };
 #endif

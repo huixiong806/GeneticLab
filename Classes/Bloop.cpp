@@ -1,6 +1,7 @@
 #include "Bloop.h"
 #include "HelloWorldScene.h"
 #include "publicVars.h"
+using namespace cocos2d;
 Bloop::~Bloop()
 {
 	label->removeFromParent();

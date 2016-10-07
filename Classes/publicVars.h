@@ -11,6 +11,8 @@ namespace publicVars
 	static cocos2d::Size largeSize = cocos2d::Size(2048, 1536);
 	static cocos2d::Size hugeSize = cocos2d::Size(4096, 3072);
 	static cocos2d::Size superHugeSize = cocos2d::Size(8192, 6144);
+	static float sunEnergyPerTick = 3.0;//每tick流入生态系统的能量
 	static float energyTransferEfficiency = 0.3;
+	extern int gloopCount;
 }
 #endif

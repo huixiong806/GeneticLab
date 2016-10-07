@@ -1,4 +1,5 @@
 #include "SloopDNA.h"
+using namespace cocos2d;
 SloopDNA::SloopDNA()
 {
 	for (int i = 0; i < SloopDNASize; i++)

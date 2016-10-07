@@ -15,7 +15,7 @@ void Floop::init(Layer& layer, int ZOrder)
 	speed = speedCalcPrmA+size.width*speedCalcPrmB;
 	noise.seed = rand() % 2147483648;
 	noise.amplitude = 1;
-	noise.frequency = 0.005*(speed);
+	noise.frequency = 0.0025*(speed);
 	noiseX = 0;
 	cycle = maxCycle/6;
 	eatCD = 0;
@@ -39,27 +39,24 @@ void Floop::tick(World& world)
 	//ªÊ÷∆
 	refreshPosition(world.camera);
 	//≥‘ ≥ŒÔ
-	int foodSize = world.food.size();
-	for (int i = 0; i < foodSize;i++)
+	for (auto iter = world.food.begin(); iter != world.food.end();)
 	{
-		if (hit(*world.food[i]))
+		if (hit(**iter))
 		{
 			cycle += Food::energy;
-			delete world.food[i];
-			world.food.erase(world.food.begin()+i);
-			break;
+			iter = world.food.erase(iter);
 		}
+		else ++iter;
 	}
 	//≥‘gloop
 	if (!eatCD)
 	{ 
-		int bloopSize = world.bloop.size();
-		for (int i = 0; i < bloopSize; i++)
+		for (auto iter = world.bloop.begin(); iter != world.bloop.end(); ++iter)
 		{
-			if (world.bloop[i]->bloopType == BloopType::gloop && hit(*world.bloop[i])&&size.width>world.bloop[i]->getSize().width)
+			if ((*iter)->bloopType == BloopType::gloop && hit(**iter)&&size.width>(*iter)->getSize().width)
 			{
-				world.bloop[i]->die = true;
-				cycle += world.bloop[i]->cycle * publicVars::energyTransferEfficiency;
+				(*iter)->die = true;
+				cycle += (*iter)->cycle * publicVars::energyTransferEfficiency;
 				eatCD = 500;
 				break;
 			}
@@ -69,17 +66,18 @@ void Floop::tick(World& world)
 	if (cycle >= maxCycle)
 	{
 		die = true;
-		world.bloop.resize(world.bloop.size() + 2);
-		world.bloop[world.bloop.size() - 2] = new Floop(world, 1,*this);
-		world.bloop[world.bloop.size() - 2]->setPosition(getPosition());
-		world.bloop[world.bloop.size() - 1] = new Floop(world, 1, *this);
-		world.bloop[world.bloop.size() - 1]->setPosition(getPosition());
+		for (int i = 0; i < 2; ++i)
+		{
+			world.bloop.emplace_back(std::make_shared<Floop>(world, 1, *this));
+			(*(world.bloop.end() - 1))->setPosition(getPosition());
+		}
 	}
 }
 Floop::Floop(Layer& layer, int ZOrder)
 {
 	dna = FloopDNA();
 	init(layer, ZOrder);
+	cycle = random<int>(maxCycle*1/6, maxCycle*1/4);
 }
 Floop::Floop(Layer& layer, int ZOrder, Floop& parent)
 {

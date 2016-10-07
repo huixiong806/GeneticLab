@@ -2,7 +2,6 @@
 #define GLOOPDNA_H
 #include "cocos2d.h"
 #include "DNA.h"
-using namespace cocos2d;
 class GloopDNA :public DNA
 {
 public:
@@ -10,7 +9,7 @@ public:
 	GloopDNA();
 	GloopDNA crossover(GloopDNA partner);
 	virtual void mutate(float mutationRate);
-	virtual Size getPhrase();
+	virtual cocos2d::Size getPhrase();
 private:
 	static const int GloopDNASize = 5;
 };

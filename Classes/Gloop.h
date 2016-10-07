@@ -20,10 +20,10 @@ public:
 	
 private:
 	GloopDNA dna;
-	//size的32~63线性映射到speed的6~4.5
+	//size的32~63线性映射到speed的12~9
 	//根据size计算速度的参数A和B，speed=A+B*size
-	const float speedCalcPrmA = 7.54839 ;
-	const float speedCalcPrmB = -0.04839;
+	const float speedCalcPrmA = 15.09678;
+	const float speedCalcPrmB = -0.09678;
 	//tick的cycle增长速度
 	const float cycleIncPerTick = 0.1;
 	//最大细胞周期，超过则分裂
