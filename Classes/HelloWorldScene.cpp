@@ -58,6 +58,12 @@ bool World::init()
 	backGround->setColor(Color3B::WHITE);
 	backGround->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	this->addChild(backGround, 0);
+	info = "KeyControl\nD:Zoom In\nF:Zoom Out\nX:Hide/Show information\nVersion1.4\ncopyright 2016 orangebird.\nPublished with MIT licence.";
+	information = Label::createWithTTF(info,"fonts/Marker Felt.ttf", 75);
+	information->setColor(Color3B(104,209,255));
+	information->setPosition(origin + Vec2(visibleSize.width / 4.0*3.0, visibleSize.height / 4.0));
+	showInformation = true;
+	this->addChild(information,2);
 	statCD = 0;
 	tick = 0;
 	SYSTEMTIME sysTime;
@@ -68,7 +74,7 @@ bool World::init()
 	filePath << (int)sysTime.wHour << "_" << (int)sysTime.wMinute << "_" << (int)sysTime.wSecond << ".csv";
 	dataOutPut.open(filePath.str().c_str(), ios::out);
 	dataOutPut << "tick,food,Gloop,Floop,Sloop" << endl;
-	schedule(schedule_selector(World::eventProcessor), 0.02f);
+	schedule(schedule_selector(World::eventProcessor), 0.03f);
     return true;
 }
 void World::eventProcessor(float dt)
@@ -78,7 +84,7 @@ void World::eventProcessor(float dt)
 	const Vec2 deltaPos[4] = { Vec2(0,1),Vec2(0,-1), Vec2(-1,0), Vec2(1,0) };
 	//移动视野
 	for (int i = 0; i <= 3; i++)
-		if (keyGroupCamera[i])camera += deltaPos[i]*(int)(glview->getDesignResolutionSize().width/204.8);
+		if (keyGroupCamera[i])camera += deltaPos[i]*(int)(glview->getDesignResolutionSize().width/204.8*1.2);
 	//清除死亡的bloop
 	for (auto iter = bloop.begin(); iter != bloop.end();)
 	{
@@ -93,9 +99,6 @@ void World::eventProcessor(float dt)
 	for (auto &i : food)
 		i->refreshPosition(camera);
 	//数据统计输出,20s进行一次
-	if (statCD == 0)
-	{
-		statCD = 499;
 		int GloopCount=0, FloopCount=0, SloopCount=0;
 		for (auto &i:bloop)
 		{
@@ -113,10 +116,16 @@ void World::eventProcessor(float dt)
 				break;
 			}
 		}
+	if (statCD == 0)
+	{
+		statCD = 499;
 		dataOutPut << tick << "," << food.size() <<",";
 		dataOutPut << GloopCount << "," << FloopCount << "," << SloopCount << endl;
 	}
 	else statCD--;
+	stringstream str;
+	str << "Tick:" << tick << "\nGloop:" << GloopCount << " Floop:" << FloopCount << " Sloop:" << SloopCount << '\n' << info;
+	information->setString(str.str());
 	++tick;
 }
 /************************************************
@@ -159,7 +168,10 @@ void World::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 			glview->setDesignResolutionSize(curResolutionSize.width+512, curResolutionSize.height+384, ResolutionPolicy::NO_BORDER);
 		curResolutionSize = glview->getDesignResolutionSize();
 		backGround->setScale(curResolutionSize.width/backGround->getContentSize().width);
+		information->setScale(curResolutionSize.width / backGround->getContentSize().width);
+		information->setPosition(Vec2(curResolutionSize.width / 4.0*3.0, curResolutionSize.height / 4.0));
 		backGround->setPosition(curResolutionSize / 2);
+		
 	}
 	else if (keyCode == EventKeyboard::KeyCode::KEY_D)  //D键，减小screensize
 	{
@@ -167,6 +179,15 @@ void World::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 			glview->setDesignResolutionSize(curResolutionSize.width-512, curResolutionSize.height-384, ResolutionPolicy::NO_BORDER);
 		curResolutionSize = glview->getDesignResolutionSize();
 		backGround->setScale(curResolutionSize.width / backGround->getContentSize().width);
+		information->setScale(curResolutionSize.width / backGround->getContentSize().width);
+		information->setPosition(Vec2(curResolutionSize.width / 4.0*3.0, curResolutionSize.height / 4.0));
 		backGround->setPosition(curResolutionSize / 2);
+	}
+	else if (keyCode == EventKeyboard::KeyCode::KEY_X)
+	{
+		if (showInformation)
+			showInformation = 0;
+		else  showInformation = 1;
+		information->setOpacity(showInformation?255:0);
 	}
 }

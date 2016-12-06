@@ -21,6 +21,9 @@ private:
 	//°´¼ü¼àÌýÆ÷
 	cocos2d::EventListenerKeyboard* keyListener;
 	cocos2d::Sprite* backGround;
+	cocos2d::Label* information;
+	bool showInformation;
+	std::string info;
 	std::ofstream dataOutPut;
 	unsigned __int64 tick;
 	void eventProcessor(float dt);

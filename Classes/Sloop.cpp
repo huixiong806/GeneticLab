@@ -10,7 +10,7 @@ void Sloop::init(Layer& layer, int ZOrder)
 	setColor(Color3B(0, 0, 255));
 	setRandomPosition(Vec2(0, 0), publicVars::superHugeSize);
 	setSize(dna.getPhrase());
-	label = Label::createWithTTF("", "fonts/Marker Felt.ttf", 0.6*size.width);
+	label = Label::createWithTTF("", "fonts/Marker Felt.ttf", 0.5*size.width);
 	layer.addChild(label, ZOrder + 1);
 	speed = speedCalcPrmA+size.width*speedCalcPrmB;
 	noise.seed = rand() % 2147483648;
