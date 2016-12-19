@@ -4,8 +4,8 @@
 #include "Floop.h"
 #include "Sloop.h"
 #include "publicVars.h"
-#include<windows.h>
-#include<sstream>
+//#include <windows.h>
+#include <sstream>
 USING_NS_CC;
 using namespace std;
 Scene* World::createScene()
@@ -33,18 +33,24 @@ bool World::init()
     Size visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 	srand((unsigned)time(NULL));
+	//设置地图大小
+	this->setChunkCount(Size(88,88));
 	//初始化食物
-	for (int i = 0; i < 700; i++)
-		food.emplace_back(make_shared<Food>(*this, 1));
-	//初始化bloops
-	for (int i = 0; i < 60; i++)
+	for (int i = 0; i < 700*16; i++)
 	{
-		if(i<2)
-			bloop.emplace_back(make_shared<Sloop>(*this, 1));
-		else if (i<11)
-			bloop.emplace_back(make_shared<Floop>(*this, 1));
+		std::shared_ptr<Food> newFood = make_shared<Food>(*this, 1);
+		food.insert(newFood);
+		newFood->addToChunk(newFood->getChunk(*this), newFood);
+	}
+	//初始化bloops
+	for (int i = 0; i < 60*16; i++)
+	{
+		if(i<2*16)
+			bloop.emplace(make_shared<Sloop>(*this, 1));
+		else if (i<11*16)
+			bloop.emplace(make_shared<Floop>(*this, 1));
 		else 
-			bloop.emplace_back(make_shared<Gloop>(*this, 1));
+			bloop.emplace(make_shared<Gloop>(*this, 1));
 	}
 	camera = Vec2(0, 0);
 	for (int i = 0; i <= 3; i++)
@@ -58,7 +64,7 @@ bool World::init()
 	backGround->setColor(Color3B::WHITE);
 	backGround->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	this->addChild(backGround, 0);
-	info = "KeyControl\nD:Zoom In\nF:Zoom Out\nX:Hide/Show information\nVersion1.4\ncopyright 2016 orangebird.\nPublished with MIT licence.";
+	info = "KeyControl\nD:Zoom In\nF:Zoom Out\nX:Hide/Show information\nVersion1.5\ncopyright 2016 orangebird.\nPublished with MIT licence.";
 	information = Label::createWithTTF(info,"fonts/Marker Felt.ttf", 75);
 	information->setColor(Color3B(104,209,255));
 	information->setPosition(origin + Vec2(visibleSize.width / 4.0*3.0, visibleSize.height / 4.0));
@@ -74,8 +80,49 @@ bool World::init()
 	filePath << (int)sysTime.wHour << "_" << (int)sysTime.wMinute << "_" << (int)sysTime.wSecond << ".csv";
 	dataOutPut.open(filePath.str().c_str(), ios::out);
 	dataOutPut << "tick,food,Gloop,Floop,Sloop" << endl;
-	schedule(schedule_selector(World::eventProcessor), 0.03f);
+	schedule(schedule_selector(World::eventProcessor), 0.02f);
     return true;
+}
+//数据统计输出,20s进行一次
+void World::outputData()
+{
+	int GloopCount = 0, FloopCount = 0, SloopCount = 0;
+	for (auto &i : bloop)
+	{
+		if (i->die)continue;
+		switch (i->bloopType)
+		{
+		case BloopType::gloop:
+			++GloopCount;
+			break;
+		case BloopType::floop:
+			++FloopCount;
+			break;
+		case BloopType::sloop:
+			++SloopCount;
+			break;
+		}
+	}
+	if (statCD == 0)
+	{
+		statCD = 499;
+		dataOutPut << tick << "," << food.size() << ",";
+		dataOutPut << GloopCount << "," << FloopCount << "," << SloopCount << endl;
+	}
+	else statCD--;
+	stringstream str;
+	str << "Tick:" << tick << "\nGloop:" << GloopCount << " Floop:" << FloopCount << " Sloop:" << SloopCount << '\n' << info;
+	information->setString(str.str());
+	++tick;
+}
+void World::setChunkCount(Size chunkCount)
+{
+	parameter::chunkCount = chunkCount;
+	parameter::worldSize.width = parameter::chunkSize.width * chunkCount.width;
+	parameter::worldSize.height = parameter::chunkSize.height * chunkCount.height;
+	chunk.resize(chunkCount.width+1);
+	for (auto &i : chunk)
+		i.resize(chunkCount.height+1);
 }
 void World::eventProcessor(float dt)
 {
@@ -89,44 +136,20 @@ void World::eventProcessor(float dt)
 	for (auto iter = bloop.begin(); iter != bloop.end();)
 	{
 		if ((*iter)->die)
+		{
+			(*iter)->removeFromChunk((*iter)->getChunk(*this),*iter);
 			iter = bloop.erase(iter);
+		}
 		else ++iter;
 	}
 	//每个bloop执行tick动作
-	for (int i = 0; i < bloop.size(); ++i)
-		bloop[i]->tick(*this);
+	for (auto &item : bloop)
+		item->tick(*this,item);
 	//绘制食物
 	for (auto &i : food)
 		i->refreshPosition(camera);
-	//数据统计输出,20s进行一次
-		int GloopCount=0, FloopCount=0, SloopCount=0;
-		for (auto &i:bloop)
-		{
-			if (i->die)continue;
-			switch (i->bloopType)
-			{
-			case BloopType::gloop:
-				++GloopCount;
-				break;
-			case BloopType::floop:
-				++FloopCount;
-				break;
-			case BloopType::sloop:
-				++SloopCount;
-				break;
-			}
-		}
-	if (statCD == 0)
-	{
-		statCD = 499;
-		dataOutPut << tick << "," << food.size() <<",";
-		dataOutPut << GloopCount << "," << FloopCount << "," << SloopCount << endl;
-	}
-	else statCD--;
-	stringstream str;
-	str << "Tick:" << tick << "\nGloop:" << GloopCount << " Floop:" << FloopCount << " Sloop:" << SloopCount << '\n' << info;
-	information->setString(str.str());
-	++tick;
+	//数据统计输出,500ticks进行一次
+	outputData();
 }
 /************************************************
 函数名:键盘释放事件

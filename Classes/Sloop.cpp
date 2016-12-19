@@ -1,5 +1,6 @@
 #include "Sloop.h"
 #include "HelloWorldScene.h"
+using namespace cocos2d;
 Sloop::~Sloop()
 {
 }
@@ -8,12 +9,12 @@ void Sloop::init(Layer& layer, int ZOrder)
 	initSprite(layer, "images\\bloop.png", ZOrder);
 	shape = Shape::circle;
 	setColor(Color3B(0, 0, 255));
-	setRandomPosition(Vec2(0, 0), publicVars::superHugeSize);
+	setRandomPosition(Vec2(0, 0), parameter::worldSize);
 	setSize(dna.getPhrase());
 	label = Label::createWithTTF("", "fonts/Marker Felt.ttf", 0.5*size.width);
 	layer.addChild(label, ZOrder + 1);
 	speed = speedCalcPrmA+size.width*speedCalcPrmB;
-	noise.seed = rand() % 2147483648;
+	noise.seed = random<unsigned long long>(0ULL, ULLONG_MAX);
 	noise.amplitude = 1;
 	noise.frequency = 0.0025*(speed);
 	noiseX = 0;
@@ -22,11 +23,11 @@ void Sloop::init(Layer& layer, int ZOrder)
 	die = false;
 	bloopType = BloopType::sloop;
 }
-void Sloop::tick(World& world)
+void Sloop::tick(World& world, std::shared_ptr<Bloop> this_)
 {
 	if (die)return;
 	//移动
-	move();
+	move(world, this_);
 	//增加cycle，减少eatCD
 	cycle += cycleIncPerTick;
 	if(eatCD>0)eatCD--;
@@ -38,28 +39,38 @@ void Sloop::tick(World& world)
 	}
 	//绘制
 	refreshPosition(world.camera);
+	//获取周围所有的chunk
+	std::vector<Chunk*>nearByChunks = getNineNearByChunks(world);
 	//吃食物
-	for (auto iter = world.food.begin(); iter != world.food.end();)
+	for (auto &chunk : nearByChunks)
 	{
-		if (hit(**iter))
+		for (auto food = chunk->food.begin(); food != chunk->food.end();)
 		{
-			cycle += Food::energy;
-			iter = world.food.erase(iter);
-		}
-		else ++iter;
-	}
-	//吃floop和gloop
-	if (!eatCD)
-	{ 
-		for (auto iter = world.bloop.begin();iter != world.bloop.end();++iter)
-		{
-			if (((*iter)->bloopType == BloopType::floop || (*iter)->bloopType == BloopType::gloop) && hit(**iter) && size.width>(*iter)->getSize().width)
+			if (this->hit(**food))
 			{
-				(*iter)->die = true;
-				cycle += (*iter)->cycle*publicVars::energyTransferEfficiency;
-				eatCD = (*iter)->bloopType == BloopType::floop ? 500 : 250;
-				break;
+				cycle += Food::energy;
+				world.food.erase(*food);
+				food = chunk->food.erase(food);
 			}
+			else ++food;
+		}
+	}
+	//吃bloop
+	if (!eatCD)
+	{
+		for (auto &chunk : nearByChunks)
+		{
+			for (auto &bloop : chunk->bloop)
+			{
+				if ((bloop->bloopType == BloopType::floop || bloop->bloopType == BloopType::gloop) && hit(*bloop) && size.width>bloop->getSize().width)
+				{
+					bloop->die = true;
+					cycle += bloop->cycle*parameter::energyTransferEfficiency;
+					eatCD = bloop->bloopType == BloopType::floop ? 500 : 250;
+					break;
+				}
+			}
+			if (eatCD)break;
 		}
 	}
 	//分裂
@@ -68,8 +79,9 @@ void Sloop::tick(World& world)
 		die = true;
 		for (int i = 0; i < 2; ++i)
 		{
-			world.bloop.emplace_back(std::make_shared<Sloop>(world, 1, *this));
-			(*(world.bloop.end() - 1))->setPosition(getPosition());
+			std::shared_ptr<Sloop> newCell = std::make_shared<Sloop>(world, 1, *this);
+			world.bloop.insert(newCell);
+			newCell->setPosition(getPosition());
 		}
 	}
 }
@@ -77,7 +89,7 @@ Sloop::Sloop(Layer& layer, int ZOrder)
 {
 	dna = SloopDNA();
 	init(layer, ZOrder);
-	cycle = random<int>(maxCycle * 1 / 6, maxCycle*1/4);
+	cycle = random<float>(maxCycle * 1 / 6, maxCycle*1/4);
 }
 Sloop::Sloop(Layer& layer, int ZOrder, Sloop& parent)
 {

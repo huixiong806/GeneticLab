@@ -3,9 +3,12 @@
 #include "cocos2d.h"
 #include "Entity.h"
 #include "Food.h"
+#include "Chunk.h"
 #include <vector>
 #include <fstream>
+#include <unordered_set>
 class Bloop;
+class Entity;
 class World : public cocos2d::Layer
 {
 public:
@@ -14,10 +17,13 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(World);
 	cocos2d::Vec2 camera;
-	std::vector<std::shared_ptr<Bloop>> bloop;
-	std::vector<std::shared_ptr<Food>> food;
+	std::unordered_set<std::shared_ptr<Bloop>> bloop;
+	std::unordered_set<std::shared_ptr<Food>> food;
+	std::vector<std::vector<Chunk>> chunk;
 	int statCD;
 private:
+	void outputData();
+	void setChunkCount(cocos2d::Size chunkCount);
 	//°´¼ü¼àÌýÆ÷
 	cocos2d::EventListenerKeyboard* keyListener;
 	cocos2d::Sprite* backGround;

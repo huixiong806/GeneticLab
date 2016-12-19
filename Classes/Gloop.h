@@ -3,21 +3,20 @@
 #include "cocos2d.h"
 #include "Bloop.h"
 #include "GloopDNA.h"
-using namespace cocos2d;
+
 //Gloop:生产者,提供食物
 class Gloop :public Bloop
 {
 public:
 	~Gloop();
 	//随机产生
-	Gloop(Layer& layer, int ZOrder);
+	Gloop(cocos2d::Layer& layer, int ZOrder);
 	//单亲繁殖
-	Gloop(Layer& layer, int ZOrder, Gloop& parent);
+	Gloop(cocos2d::Layer& layer, int ZOrder, Gloop& parent);
 	//双亲繁殖
-	Gloop(Layer& layer, int ZOrder, Gloop& parentA, Gloop& parentB);
+	Gloop(cocos2d::Layer& layer, int ZOrder, Gloop& parentA, Gloop& parentB);
 	//每tick要做的事
-	virtual void tick(World& world);
-	
+	virtual void tick(World& world, std::shared_ptr<Bloop> this_);
 private:
 	GloopDNA dna;
 	//size的32~63线性映射到speed的12~9
@@ -30,7 +29,7 @@ private:
 	const float maxCycle = 265;
 	//每tick产生食物的概率，范围在0~1之间。
 	float FoodProvideRatePerTick();
-	virtual void init(Layer& layer, int ZOrder);
-	virtual void refreshPosition(Vec2 camera_);
+	virtual void init(cocos2d::Layer& layer, int ZOrder);
+	virtual void refreshPosition(cocos2d::Vec2 camera_);
 };
 #endif

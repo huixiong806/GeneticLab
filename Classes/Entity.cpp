@@ -1,17 +1,20 @@
-#include"Entity.h"
+#include "Entity.h"
+#include "Chunk.h"
+#include "HelloWorldScene.h"
 using namespace cocos2d;
 void Entity::setRandomColor()
 {
-	int R = random() % 256;
-	int G = random() % 256;
-	int B = random() % 256;
+	int R = random<int>(0, 255);
+	int G = random<int>(0, 255);
+	int B = random<int>(0, 255);
 	setColor(Color3B(R, G, B));
 }
 bool Entity::hit(Entity& another)
 {
 	float r = getSize().width / 2 + another.getSize().width / 2;
-	if (r < getPosition().distance(another.getPosition()))return false;
-	return true;
+	Vec2 posA = this->getPosition();
+	Vec2 posB = another.getPosition();
+	return (r*r >= (posA.x - posB.x)*(posA.x - posB.x) + (posA.y - posB.y)*(posA.y - posB.y));
 }
 void Entity::setColor(Color3B color)
 {
@@ -65,5 +68,14 @@ void Entity::initSprite(Layer& layer, std::string picturePath, int ZOrder)
 {
 	sprite = Sprite::create(picturePath);
 	layer.addChild(sprite, ZOrder);
+}
+//获取所在的chunk的引用
+Chunk& Entity::getChunk(World& world)
+{
+	Vec2 position = this->getPosition();
+	if (position.x < 0)position.x += parameter::worldSize.width + parameter::chunkSize.width;
+	if (position.y < 0)position.y += parameter::worldSize.height + parameter::chunkSize.height;
+	Vec2 index = Vec2(position.x / parameter::chunkSize.width, position.y / parameter::chunkSize.height);
+	return world.chunk[(int)index.x][(int)index.y];
 }
 

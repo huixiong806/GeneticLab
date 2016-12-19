@@ -16,25 +16,16 @@
     <Filter Include="src\DNA">
       <UniqueIdentifier>{d168ecc9-9155-4d6e-86cd-dce1d50be00d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\NeuralNetwork">
+      <UniqueIdentifier>{04695bbd-2aad-4215-bab4-ec3b817625aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Main">
+      <UniqueIdentifier>{70afc206-5dbe-454d-a07d-1cd4caad4f44}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\AppDelegate.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Food.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\Entity.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\PerlinNoise.cpp">
-      <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\Bloop.cpp">
       <Filter>src\Bloop</Filter>
@@ -60,28 +51,37 @@
     <ClCompile Include="..\Classes\SloopDNA.cpp">
       <Filter>src\DNA</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\AppDelegate.cpp">
+      <Filter>src\Main</Filter>
+    </ClCompile>
     <ClCompile Include="..\Classes\publicVars.cpp">
-      <Filter>src</Filter>
+      <Filter>src\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\PerlinNoise.cpp">
+      <Filter>src\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
+      <Filter>src\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Food.cpp">
+      <Filter>src\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Entity.cpp">
+      <Filter>src\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Chunk.cpp">
+      <Filter>src\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\NeuralNetwork.cpp">
+      <Filter>src\NeuralNetwork</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\neuron.cpp">
+      <Filter>src\NeuralNetwork</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
       <Filter>win32</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\AppDelegate.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\HelloWorldScene.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Food.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Entity.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\PerlinNoise.h">
-      <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Bloop.h">
       <Filter>src\Bloop</Filter>
@@ -107,10 +107,40 @@
     <ClInclude Include="..\Classes\SloopDNA.h">
       <Filter>src\DNA</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\publicVars.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="..\Classes\publicVars.h">
+      <Filter>src\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\AppDelegate.h">
+      <Filter>src\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\PerlinNoise.h">
+      <Filter>src\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\HelloWorldScene.h">
+      <Filter>src\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Food.h">
+      <Filter>src\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity.h">
+      <Filter>src\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Chunk.h">
+      <Filter>src\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\NeuralNetwork.h">
+      <Filter>src\NeuralNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\neuron.h">
+      <Filter>src\NeuralNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Node.h">
+      <Filter>src\NeuralNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Functions.hpp">
+      <Filter>src\NeuralNetwork</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="game.rc">
@@ -119,5 +149,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\game.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
 </Project>
