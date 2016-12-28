@@ -10,26 +10,30 @@ Bloop::~Bloop()
 void Bloop::OutOfRangeCheck()
 {
 	Size& chunkSize = parameter::chunkSize;
-	if (getPosition().x < -chunkSize.width)setPosition(getPosition() + Vec2(parameter::worldSize.width+chunkSize.width/2, 0));
-	if (getPosition().x > parameter::worldSize.width + chunkSize.width)setPosition(getPosition() + Vec2(-parameter::worldSize.width-chunkSize.width/2, 0));
-	if (getPosition().y < -chunkSize.height)setPosition(getPosition() + Vec2(0, parameter::worldSize.height + chunkSize.height / 2));
-	if (getPosition().y > parameter::worldSize.height + chunkSize.height)setPosition(getPosition() + Vec2(0, -parameter::worldSize.height - chunkSize.height / 2));
+	if (getPosition().x < chunkSize.width*0.5)setPosition(getPosition() + Vec2(parameter::worldSize.width, 0));
+	if (getPosition().x > parameter::worldSize.width + chunkSize.width*0.5)setPosition(getPosition() + Vec2(-parameter::worldSize.width, 0));
+	if (getPosition().y < chunkSize.height*0.5)setPosition(getPosition() + Vec2(0, parameter::worldSize.height));
+	if (getPosition().y > parameter::worldSize.height + chunkSize.height*0.5)setPosition(getPosition() + Vec2(0, -parameter::worldSize.height));
 }
-void Bloop::move(World& world,std::shared_ptr<Bloop> this_)
+void Bloop::moveTo(cocos2d::Vec2 newPosition, World& world)
 {
 	Chunk& nowChunk = getChunk(world);
-	float rad = noise.perlin_noise(noiseX);
-	rad -= (int(rad / (2.0 * PI))) * 2.0 * PI;
-	Vec2 deltaPosition= Vec2(cosf(rad),sinf(rad))*speed;
-	setPosition(getPosition() + deltaPosition);
-	noiseX++;
+	setPosition(newPosition);
 	OutOfRangeCheck();
 	Chunk& nextChunk = getChunk(world);
 	if (std::addressof(nowChunk) != std::addressof(nextChunk))
 	{
-		removeFromChunk(nowChunk, this_);
-		addToChunk(nextChunk, this_);
+		removeFromChunk(nowChunk);
+		addToChunk(nextChunk);
 	}
+}
+void Bloop::move(World& world)
+{
+	float rad = noise.perlin_noise(noiseX);
+	rad -= (int(rad / (2.0 * PI))) * 2.0 * PI;
+	Vec2 deltaPosition= Vec2(cosf(rad),sinf(rad))*speed;
+	moveTo(getPosition() + deltaPosition,world);
+	noiseX++;
 }
 void Bloop::refreshPosition(Vec2 camera_)
 {
@@ -37,14 +41,14 @@ void Bloop::refreshPosition(Vec2 camera_)
 	label->setPosition(position - camera_);
 }
 //把自己加到某个chunk中
-void Bloop::addToChunk(Chunk& chunk, std::shared_ptr<Bloop> this_)
+void Bloop::addToChunk(Chunk& chunk)
 {
-	chunk.addBloop(this_);
+	chunk.addBloop(shared_from_this());
 }
 //从某个chunk中清除
-void Bloop::removeFromChunk(Chunk& chunk, std::shared_ptr<Bloop> this_)
+void Bloop::removeFromChunk(Chunk& chunk)
 {
-	chunk.removeBloop(this_);
+	chunk.removeBloop(shared_from_this());
 }
 //获取临近的9个chunks
 std::vector<Chunk*> Bloop::getNineNearByChunks(World& world)

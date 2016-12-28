@@ -61,13 +61,14 @@ void Neuron::bindInput(unsigned int index,shared_ptr<double> input)
 	value[index] = input;
 }
 
-/** add an input (pointer),if already exist,if not exist,do nothing.*/
+/** add an input (pointer),if already exist,do nothing.*/
 void Neuron::addInput(std::shared_ptr<double> input)
 {
 	for (auto iter = value.begin(); iter != value.end(); ++iter)
-		if (*iter == input) return;
+		if (std::addressof(**iter) == std::addressof(*input)) return;
 	value.push_back(input);
 	weight.emplace_back(RANDNUM);
+	++inputSize;
 }
 	
 /** delete input,if not exist,do nothing.*/
@@ -95,5 +96,12 @@ void Neuron::clearInput()
 unsigned int Neuron::getInputSize()
 {
 	return inputSize;
+}
+
+void Neuron::setWeight(std::vector<double>& weight)
+{
+	this->bias = weight.back();
+	weight.pop_back();
+	this->weight = weight;
 }
 NS_ANN_END

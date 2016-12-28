@@ -63,7 +63,6 @@ Entity::~Entity()
 {
 	sprite->removeFromParent();
 }
-
 void Entity::initSprite(Layer& layer, std::string picturePath, int ZOrder)
 {
 	sprite = Sprite::create(picturePath);
@@ -73,9 +72,8 @@ void Entity::initSprite(Layer& layer, std::string picturePath, int ZOrder)
 Chunk& Entity::getChunk(World& world)
 {
 	Vec2 position = this->getPosition();
-	if (position.x < 0)position.x += parameter::worldSize.width + parameter::chunkSize.width;
-	if (position.y < 0)position.y += parameter::worldSize.height + parameter::chunkSize.height;
-	Vec2 index = Vec2(position.x / parameter::chunkSize.width, position.y / parameter::chunkSize.height);
-	return world.chunk[(int)index.x][(int)index.y];
+	int indexX = position.x / parameter::chunkSize.width;
+	int indexY = position.y / parameter::chunkSize.height;
+	return world.chunk[indexX][indexY];
 }
 

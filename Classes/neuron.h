@@ -45,6 +45,8 @@ public:
 	
 	/** get input size */
 	unsigned int getInputSize();
+
+	void setWeight(std::vector<double>& weight);
 protected:
 	/** bias value */
 	double bias;

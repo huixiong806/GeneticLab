@@ -150,17 +150,15 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\DNA.cpp" />
     <ClCompile Include="..\Classes\Entity.cpp" />
     <ClCompile Include="..\Classes\Floop.cpp" />
-    <ClCompile Include="..\Classes\FloopDNA.cpp" />
     <ClCompile Include="..\Classes\Food.cpp" />
     <ClCompile Include="..\Classes\Gloop.cpp" />
-    <ClCompile Include="..\Classes\GloopDNA.cpp" />
+    <ClCompile Include="..\Classes\Recorder.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
     <ClCompile Include="..\Classes\NeuralNetwork.cpp" />
     <ClCompile Include="..\Classes\neuron.cpp" />
     <ClCompile Include="..\Classes\PerlinNoise.cpp" />
     <ClCompile Include="..\Classes\publicVars.cpp" />
     <ClCompile Include="..\Classes\Sloop.cpp" />
-    <ClCompile Include="..\Classes\SloopDNA.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -170,11 +168,10 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\DNA.h" />
     <ClInclude Include="..\Classes\Entity.h" />
     <ClInclude Include="..\Classes\Floop.h" />
-    <ClInclude Include="..\Classes\FloopDNA.h" />
     <ClInclude Include="..\Classes\Food.h" />
     <ClInclude Include="..\Classes\Functions.hpp" />
     <ClInclude Include="..\Classes\Gloop.h" />
-    <ClInclude Include="..\Classes\GloopDNA.h" />
+    <ClInclude Include="..\Classes\Recorder.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="..\Classes\NeuralNetwork.h" />
     <ClInclude Include="..\Classes\neuron.h" />
@@ -182,7 +179,6 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\PerlinNoise.h" />
     <ClInclude Include="..\Classes\publicVars.h" />
     <ClInclude Include="..\Classes\Sloop.h" />
-    <ClInclude Include="..\Classes\SloopDNA.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

@@ -4,13 +4,32 @@ using namespace cocos2d;
 Gloop::~Gloop()
 {
 }
+void Gloop::initBrain()
+{
+	brain = ann::NeuralNetwork(true, 3, 2, std::vector<unsigned int>{4,3, 2});
+	std::vector<std::vector<ann::Neuron>>& neuron = brain.getNeuron();
+	int geneIndex = 0;
+	for (auto &i : neuron)
+	{
+		for (auto &j : i)
+		{
+			//+1 is because bias
+			int needSize = j.getInputSize() + 1;
+			std::vector<double>input;
+			while (needSize--)
+				input.push_back(dna.getBrainGene(geneIndex++));
+			j.setWeight(input);
+			j.setActivationFun(function::sigmoid);
+		}
+	}
+}
 void Gloop::init(Layer& layer, int ZOrder)
 {
 	initSprite(layer, "images\\bloop.png", ZOrder);
 	shape = Shape::circle;
 	setColor(Color3B(0, 255, 0));
 	setRandomPosition(Vec2(0, 0), parameter::worldSize);
-	setSize(dna.getPhrase());
+	setSize(dna.getSize());
 	label = Label::createWithTTF("", "fonts/Marker Felt.ttf", 0.5*size.width);
 	layer.addChild(label, ZOrder + 1);
 	speed = speedCalcPrmA+size.width*speedCalcPrmB;
@@ -18,27 +37,77 @@ void Gloop::init(Layer& layer, int ZOrder)
 	noise.amplitude = 1;
 	noise.frequency = 0.0025*(speed);
 	noiseX = 0;
-	cycle = maxCycle/4;
 	die = false;
+	cycle = maxCycle*parameter::gloopStartCycleCoefficient;
 	bloopType = BloopType::gloop;
+	initBrain();
 }
 float Gloop::FoodProvideRatePerTick()
 {
 	if (cycle < 70)return 0;
 	else return 0.0008+cycle*0.000005;
 }
-void Gloop::tick(World& world, std::shared_ptr<Bloop> this_)
+std::pair<double,double> Gloop::getNearestBloop(World& world)
 {
-	//移动
-	move(world,this_);
-	//增加cycle
-	int gloopCount = 0;
-	for (auto i : world.bloop)
+	std::vector<Chunk*> nearByChunks = getNineNearByChunks(world);
+	std::shared_ptr<Bloop> nearestFSloop = nullptr;
+	std::shared_ptr<Bloop> nearestGloop = nullptr;
+	double fsSquareDistance = INFINITE,gSquareDistance = INFINITE;
+	for (auto &chunk : nearByChunks)
 	{
-		if (i->bloopType == BloopType::gloop)
-			++gloopCount;
+		for (auto &bloop : chunk->bloopSet())
+		{
+			Vec2 delPos = Vec2(bloop->getPosition().x - this->getPosition().x, bloop->getPosition().y - this->getPosition().y);
+			if (bloop->bloopType == BloopType::floop || bloop->bloopType == BloopType::sloop)
+			{
+				if (fsSquareDistance > delPos.x*delPos.x + delPos.y*delPos.y)
+				{
+					fsSquareDistance = delPos.x*delPos.x + delPos.y*delPos.y;
+					nearestFSloop = bloop;
+				}
+			}else{
+				if (gSquareDistance > delPos.x*delPos.x + delPos.y*delPos.y)
+				{
+					gSquareDistance = delPos.x*delPos.x + delPos.y*delPos.y;
+					nearestGloop = bloop;
+				}
+			}	
+		}
 	}
-	cycle += parameter::sunEnergyPerTick / gloopCount;
+	int fsAngle = 0, gAngle = 0;
+	if (nearestFSloop != nullptr)
+	{
+		Vec2 delPos = Vec2(nearestFSloop->getPosition().x - this->getPosition().x, nearestFSloop->getPosition().y - this->getPosition().y);
+		fsAngle = atan2f(delPos.y, delPos.x);
+	}
+	if (nearestGloop != nullptr)
+	{
+		Vec2 delPos = Vec2(nearestGloop->getPosition().x - this->getPosition().x, nearestGloop->getPosition().y - this->getPosition().y);
+		gAngle = atan2f(delPos.y, delPos.x);
+	}
+	return std::make_pair(fsAngle, gAngle);
+}
+void Gloop::move(World& world)
+{
+	double randomAngle = noise.perlin_noise(noiseX);
+	randomAngle -= (int(randomAngle / (2.0 * PI))) * 2.0 * PI;
+	std::pair<double,double> nearestBloop = getNearestBloop(world);
+	std::vector<double> brainInput = { nearestBloop.first,nearestBloop.second};
+	brain.setAllInputs(brainInput);
+	brain.calculate();
+	double rad = brain.allOutputs()[0];
+	double speedPercent = brain.allOutputs()[1];
+	Vec2 deltaPosition = Vec2(cosf(randomAngle), sinf(randomAngle))*speed;//*speedPercent;
+	moveTo(getPosition() + deltaPosition, world);
+	noiseX++;
+}
+void Gloop::tick(World& world)
+{
+	if (die)return;
+	//移动
+	move(world);
+	//增加cycle
+	cycle += parameter::sunEnergyPerTick / world.bloopCount[(int)BloopType::gloop];
 	//绘制
 	refreshPosition(world.camera);
 	//掉落食物
@@ -58,27 +127,26 @@ void Gloop::tick(World& world, std::shared_ptr<Bloop> this_)
 		for (int i = 0; i < 2;++i)
 		{
 			std::shared_ptr<Gloop> newCell = std::make_shared<Gloop>(world, 1, *this);
-			world.bloop.insert(newCell);
-			newCell->setPosition(getPosition());
+			newCell->moveTo(getPosition(),world);
+			world.addBloop(newCell);
 		}
 	}
 }
 Gloop::Gloop(Layer& layer, int ZOrder)
 {
-	dna = GloopDNA();
+	dna = DNA(parameter::gloopSizeDNALength, parameter::gloopBrainDNALength,parameter::gloopMinSize);
 	init(layer, ZOrder);
-	cycle = random<float>(maxCycle * 1 / 6, maxCycle * 1 / 4);
 }
 Gloop::Gloop(Layer& layer, int ZOrder, Gloop& parent)
 {
-	dna = parent.dna.crossover(parent.dna);
-	dna.mutate(0.02);
+	dna = parent.dna.crossOver(parent.dna);
+	dna.mutate(parameter::gloopGeneMutationRate);
 	init(layer, ZOrder);
 }
 Gloop::Gloop(Layer& layer, int ZOrder, Gloop& parentA, Gloop& parentB)
 {
-	dna = parentA.dna.crossover(parentB.dna);
-	dna.mutate(0.02);
+	dna = parentA.dna.crossOver(parentB.dna);
+	dna.mutate(parameter::gloopGeneMutationRate);
 	init(layer, ZOrder);
 }
 void Gloop::refreshPosition(Vec2 camera_)

@@ -49,7 +49,6 @@ public:
 	void clearInput();
 
 	/** set the value of all inputs
-	 *	warning:this could make some connections illegal.
 	 *  warning:it is unsafe not to use smart pointer.
 	*/
 	void setAllInputs(std::vector<double> value);
@@ -69,7 +68,9 @@ public:
 	/** calculate */
 	void calculate();
 
-	
+	std::vector<std::vector<Neuron>>& getNeuron();
+
+	std::vector<std::shared_ptr<double>>& getInput();
 protected:
 	/** input layer */
 	std::vector<std::shared_ptr<double>> input;

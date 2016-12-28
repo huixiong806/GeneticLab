@@ -39,17 +39,8 @@
     <ClCompile Include="..\Classes\DNA.cpp">
       <Filter>src\DNA</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\GloopDNA.cpp">
-      <Filter>src\DNA</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\FloopDNA.cpp">
-      <Filter>src\DNA</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\Sloop.cpp">
       <Filter>src\Bloop</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Classes\SloopDNA.cpp">
-      <Filter>src\DNA</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\AppDelegate.cpp">
       <Filter>src\Main</Filter>
@@ -78,6 +69,9 @@
     <ClCompile Include="..\Classes\neuron.cpp">
       <Filter>src\NeuralNetwork</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\Recorder.cpp">
+      <Filter>src\Main</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -95,17 +89,8 @@
     <ClInclude Include="..\Classes\DNA.h">
       <Filter>src\DNA</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\GloopDNA.h">
-      <Filter>src\DNA</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\FloopDNA.h">
-      <Filter>src\DNA</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\Sloop.h">
       <Filter>src\Bloop</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\SloopDNA.h">
-      <Filter>src\DNA</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
     <ClInclude Include="..\Classes\publicVars.h">
@@ -140,6 +125,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\Functions.hpp">
       <Filter>src\NeuralNetwork</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Recorder.h">
+      <Filter>src\Main</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

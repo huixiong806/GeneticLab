@@ -4,7 +4,17 @@
 class DNA
 {
 public:
-	virtual void mutate(float mutationRate) = 0;
-	virtual cocos2d::Size getPhrase() = 0;
+	DNA() {}
+	DNA(int SizeDNALength,int BrainDNALength,int MinSize);
+	virtual ~DNA(){}
+	DNA crossOver(DNA partner);
+	virtual void mutate(float mutationRate);
+	virtual cocos2d::Size getSize();
+	virtual float getBrainGene(int index);
+private:
+	int sizeDNALength, brainDNALength;
+	int minSize;
+	std::vector<bool> sizeGene;
+	std::vector<float> brainGene;
 };
 #endif

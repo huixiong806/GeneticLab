@@ -4,6 +4,9 @@ NS_ANN_BEGIN
 NeuralNetwork::NeuralNetwork(){}
 NeuralNetwork::NeuralNetwork(bool fullConnection, unsigned int layerSize,unsigned int inputSize,std::vector<unsigned int>neuronSize)
 {
+	input.resize(inputSize);
+	for (auto &i : input)
+		i = make_shared<double>(0);
 	neuron.resize(layerSize);
 	for (int i = 0; i < layerSize; ++i)
 		for (int j = 0; j < neuronSize[i]; ++j)
@@ -25,7 +28,7 @@ void NeuralNetwork::setToFull()
 	for (int i = 1; i < neuron.size(); ++i)
 		for (auto &j : neuron[i])
 			for (auto &k : neuron[i - 1])
-				j.addInput(shared_ptr<double>(&k.Output(), [](void*){}));
+				j.addInput(shared_ptr<double>(std::addressof(k.Output()), [](void*){}));
 }
 
 /** connect A's axon to B's dendron.If already exist,do nothing. */
@@ -72,14 +75,12 @@ void NeuralNetwork::clearInput()
 }
 
 /** set the value of all inputs
-*	warning:this could make some connections illegal.
 *   warning:it is unsafe not to use smart pointer.
 */
 void NeuralNetwork::setAllInputs(vector<double> value)
 {
-	input.clear();
 	for (int i = 0; i < value.size(); ++i)
-		input.emplace_back(make_shared<double>(value[i]));
+		*input[i]=value[i];
 }
 
 /** get the value of given output */
@@ -118,5 +119,13 @@ void NeuralNetwork::calculate()
 	for (auto &i : neuron)
 		for (auto &j : i)
 			j.calculate();
+}
+std::vector<std::vector<Neuron>>& NeuralNetwork::getNeuron()
+{
+	return neuron;
+}
+std::vector<std::shared_ptr<double>>& NeuralNetwork::getInput()
+{
+	return input;
 }
 NS_ANN_END
