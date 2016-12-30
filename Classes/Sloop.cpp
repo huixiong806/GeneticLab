@@ -30,13 +30,11 @@ void Sloop::init(Layer& layer, int ZOrder)
 	setColor(Color3B(0, 0, 255));
 	setRandomPosition(Vec2(0, 0), parameter::worldSize);
 	setSize(dna.getSize());
-	label = Label::createWithTTF("", "fonts/Marker Felt.ttf", 0.5*size.width);
-	layer.addChild(label, ZOrder + 1);
-	speed = speedCalcPrmA+size.width*speedCalcPrmB;
-	noise.seed = random<unsigned long long>(0ULL, ULLONG_MAX);
-	noise.amplitude = 1;
-	noise.frequency = 0.0025*(speed);
-	noiseX = 0;
+	maxSpeed = speedCalcPrmA+size.width*speedCalcPrmB;
+	//noise.seed = random<unsigned long long>(0ULL, ULLONG_MAX);
+	//noise.amplitude = 1;
+	//noise.frequency = 0.0025*(speed);
+	//noiseX = 0;
 	cycle = maxCycle*parameter::sloopStartCycleCoefficient;
 	eatCD = 0;
 	die = false;
@@ -46,7 +44,7 @@ void Sloop::init(Layer& layer, int ZOrder)
 std::tuple<double,double> Sloop::getNearByInformation(World& world)
 {
 	std::vector<Chunk*> nearByChunks = getNineNearByChunks(world);
-	std::shared_ptr<Bloop> nearestBloop = nullptr;
+	std::shared_ptr<Bloop> nearestFGloop = nullptr;
 	std::shared_ptr<Bloop> nearestSloop = nullptr;
 	std::shared_ptr<Food> nearestFood = nullptr;
 	double squareDistanceBloop = INFINITE,squareDistanceFood = INFINITE, squareDistanceSloop = INFINITE;
@@ -60,7 +58,7 @@ std::tuple<double,double> Sloop::getNearByInformation(World& world)
 				if (squareDistanceBloop > delPos.x*delPos.x + delPos.y*delPos.y)
 				{
 					squareDistanceBloop = delPos.x*delPos.x + delPos.y*delPos.y;
-					nearestBloop = bloop;
+					nearestFGloop = bloop;
 				}
 			}
 			else
@@ -85,12 +83,11 @@ std::tuple<double,double> Sloop::getNearByInformation(World& world)
 		}
 		*/
 	}
-	double foodAngle, bloopAngle,sloopAngle;
-	if (nearestBloop == nullptr)bloopAngle=0;
-	else
+	double foodAngle=0, fsloopAngle=0,sloopAngle=0;
+	if (nearestFGloop != nullptr)
 	{
-		Vec2 delPos = Vec2(nearestBloop->getPosition().x - this->getPosition().x, nearestBloop->getPosition().y - this->getPosition().y);
-		bloopAngle = atan2f(delPos.y, delPos.x);
+		Vec2 delPos = Vec2(nearestFGloop->getPosition().x - this->getPosition().x, nearestFGloop->getPosition().y - this->getPosition().y);
+		fsloopAngle = atan2f(delPos.y, delPos.x);
 	}
 	/*
 	if (nearestFood == nullptr)foodAngle = 0;
@@ -100,18 +97,17 @@ std::tuple<double,double> Sloop::getNearByInformation(World& world)
 		foodAngle = atan2f(delPos.y, delPos.x);
 	}
 	*/
-	if (nearestSloop == nullptr)sloopAngle = 0;
-	else
+	if (nearestSloop != nullptr)
 	{
 		Vec2 delPos = Vec2(nearestSloop->getPosition().x - this->getPosition().x, nearestSloop->getPosition().y - this->getPosition().y);
 		sloopAngle = atan2f(delPos.y, delPos.x);
 	}
-	return std::make_tuple(sloopAngle,bloopAngle);
+	return std::make_tuple(sloopAngle, fsloopAngle);
 }
 void Sloop::move(World& world)
 {
-	double randomAngle = noise.perlin_noise(noiseX);
-	randomAngle -= (int(randomAngle / (2.0 * PI))) * 2.0 * PI;
+	//double randomAngle = noise.perlin_noise(noiseX);
+	//randomAngle -= (int(randomAngle / (2.0 * PI))) * 2.0 * PI;
 	std::tuple<double, double> neayByinfodmation = getNearByInformation(world);
 	std::vector<double> brainInput = 
 	{
@@ -122,10 +118,10 @@ void Sloop::move(World& world)
 	brain.calculate();
 	double rad = brain.allOutputs()[0];
 	double speedPercent = brain.allOutputs()[1];
-	Vec2 deltaPosition = Vec2(cosf(rad), sinf(rad)) * 4 * speed*speedPercent;
+	Vec2 deltaPosition = Vec2(cosf(rad), sinf(rad)) * 4 * maxSpeed*speedPercent;
 	cycle += cycleIncPerTick / 2 + speedPercent * cycleIncPerTick * 0.7;
 	moveTo(getPosition() + deltaPosition, world);
-	noiseX++;
+	//noiseX++;
 }
 void Sloop::tick(World& world)
 {
@@ -210,10 +206,5 @@ Sloop::Sloop(Layer& layer, int ZOrder, Sloop& parentA, Sloop& parentB)
 void Sloop::refreshPosition(Vec2 camera_)
 {
 	sprite->setPosition(position - camera_);
-	label->setPosition(position - camera_);
-	std::string str;
-	std::ostringstream os;
-	os << (int)cycle;
-	str.append(os.str());
-	label->setString(str);
+	sprite->setOpacity(cycle / maxCycle* 255.0f);
 }

@@ -38,7 +38,7 @@ private:
 	bool keyGroupCamera[4];
 	void eventProcessor(float dt);
 	std::unordered_set<std::shared_ptr<Bloop>> bloop;
-	std::unordered_set<std::shared_ptr<Bloop>>::const_iterator eraseBloop(std::unordered_set<std::shared_ptr<Bloop>>::const_iterator target);
+	std::unordered_set<std::shared_ptr<Bloop>>::const_iterator eraseBloop(std::unordered_set<std::shared_ptr<Bloop>>::iterator target);
 	virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 }; 

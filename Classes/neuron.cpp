@@ -12,7 +12,7 @@ Neuron::Neuron()
 /** initalize 2 */
 Neuron::Neuron(unsigned int InputCount)
 {
-	new(this)Neuron();
+	bias = -1.0;
 	inputSize = InputCount;
 	for(int i=0;i<(int)InputCount;++i)
 	{

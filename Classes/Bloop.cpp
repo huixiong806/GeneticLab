@@ -5,7 +5,6 @@
 using namespace cocos2d;
 Bloop::~Bloop()
 {
-	label->removeFromParent();
 }
 void Bloop::OutOfRangeCheck()
 {
@@ -29,16 +28,15 @@ void Bloop::moveTo(cocos2d::Vec2 newPosition, World& world)
 }
 void Bloop::move(World& world)
 {
-	float rad = noise.perlin_noise(noiseX);
-	rad -= (int(rad / (2.0 * PI))) * 2.0 * PI;
-	Vec2 deltaPosition= Vec2(cosf(rad),sinf(rad))*speed;
-	moveTo(getPosition() + deltaPosition,world);
-	noiseX++;
+	//float rad = noise.perlin_noise(noiseX);
+	//rad -= (int(rad / (2.0 * PI))) * 2.0 * PI;
+	//Vec2 deltaPosition= Vec2(cosf(rad),sinf(rad))*speed;
+	//moveTo(getPosition() + deltaPosition,world);
+	//noiseX++;
 }
 void Bloop::refreshPosition(Vec2 camera_)
 {
 	sprite->setPosition(position - camera_);
-	label->setPosition(position - camera_);
 }
 //把自己加到某个chunk中
 void Bloop::addToChunk(Chunk& chunk)

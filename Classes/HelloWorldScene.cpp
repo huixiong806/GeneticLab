@@ -64,7 +64,7 @@ bool World::init()
 	backGround->setColor(Color3B::WHITE);
 	backGround->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	this->addChild(backGround, 0);
-	info = "KeyControl\nD:Zoom In\nF:Zoom Out\nX:Hide/Show information\nVersion1.5\ncopyright 2016 orangebird.\nPublished with MIT licence.";
+	info = "KeyControl\nD:Zoom In\nF:Zoom Out\nX:Hide/Show information\nVersion1.5.3\ncopyright 2016 orangebird.\nPublished with MIT licence.";
 	information = Label::createWithTTF(info,"fonts/Marker Felt.ttf", 60);
 	information->setColor(Color3B(104,209,255));
 	information->setPosition(origin + Vec2(visibleSize.width / 5.0*4.0, visibleSize.height / 4.0));
@@ -93,7 +93,7 @@ void World::outputData()
 		bloopCount[(int)BloopType::sloop],
 	});
 	std::stringstream str;
-	str << "Tick:" << tick << "\nFood:"<< food.size() << "\nGloop:" << bloopCount[(int)BloopType::gloop] << " Floop:" << bloopCount[(int)BloopType::floop] << " Sloop:" << bloopCount[(int)BloopType::sloop] << '\n' << info;
+	str << "Tick:" << tick <<"\nLocation:"<<camera.x<<","<<camera.y<< "\nFood:"<< food.size() << "\nGloop:" << bloopCount[(int)BloopType::gloop] << " Floop:" << bloopCount[(int)BloopType::floop] << " Sloop:" << bloopCount[(int)BloopType::sloop] << '\n' << info;
 	information->setString(str.str());
 }
 void World::setChunkCount(Size chunkCount)
@@ -112,7 +112,7 @@ void World::addBloop(std::shared_ptr<Bloop> bloop)
 	++bloopCount[(int)bloop->bloopType];
 }
 std::unordered_set<std::shared_ptr<Bloop>>::const_iterator 
-	World::eraseBloop(std::unordered_set<std::shared_ptr<Bloop>>::const_iterator target)
+	World::eraseBloop(std::unordered_set<std::shared_ptr<Bloop>>::iterator target)
 {
 	(*target)->removeFromChunk((*target)->getChunk(*this));
 	--bloopCount[(int)(*target)->bloopType];

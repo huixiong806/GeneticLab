@@ -1,25 +1,36 @@
 #ifndef PERLINNOISE_H
 #define PERLINNOISE_H
+#include <random>
+#include <array>
+//PerlinNoise模板来源于
+//http://blog.kazade.co.uk/2014/05/a-public-domain-c11-1d2d3d-perlin-noise.html
 /************************************************
-类名:perlin noise
+类名:PerlinNoise
 功能:产生柏林噪声
 备注:无
 ************************************************/
-class PerlinNoise
+class PerlinNoise 
 {
 public:
-	double frequency;
-	double amplitude;//幅度，可改，越大地形高度变化越大
-	unsigned long long seed;
-	//随机数发生器(未经过处理)
-	double Noise(unsigned long long x);
-	//平滑噪声(取平均值)
-	double smoothedNoise(double x);
-	//线性插值函数
-	double interpolate(double a, double b, double x);
-	//插值噪声
-	double interpolatedNoise(double x);
-	//最终函数,传入x返回对应的y
-	double perlin_noise(double x);
+	PerlinNoise(uint32_t seed = 0);
+
+	double noise(double x) const { return noise(x, 0, 0); }
+	double noise(double x, double y) const { return noise(x, y, 0); }
+	double noise(double x, double y, double z) const;
+
+private:
+	std::array<int, 512> p;
+};
+
+class PerlinOctave 
+{
+public:
+	PerlinOctave(int octaves, uint32_t seed = 0);
+	double noise(double x) const { return noise(x, 0, 0); }
+	double noise(double x, double y) const { return noise(x, y, 0); }
+	double noise(double x, double y, double z) const;
+private:
+	PerlinNoise perlin_;
+	int octaves_;
 };
 #endif

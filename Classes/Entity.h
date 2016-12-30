@@ -34,7 +34,6 @@ protected:
 	//对于圆，直径。对于正方体，边长。
 	cocos2d::Size size;
 	cocos2d::Sprite* sprite;
-	float speed;
 	Shape shape;
 };
 #endif

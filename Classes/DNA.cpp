@@ -44,7 +44,7 @@ void DNA::mutate(float mutationRate)
 	for (int i = 0; i < brainDNALength; ++i)
 	{
 		if (cocos2d::random<float>(0.0, 1.0) <= mutationRate)
-			brainGene[i] += cocos2d::random<float>(-2.0, 2.0);
+			brainGene[i] = cocos2d::random<float>(-1.0, 1.0);
 	}
 }
 cocos2d::Size DNA::getSize()

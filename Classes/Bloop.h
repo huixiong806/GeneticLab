@@ -15,6 +15,7 @@ enum class BloopType
 class Bloop :public Entity,std::enable_shared_from_this<Bloop>
 {
 public:
+	Bloop(){}
 	virtual ~Bloop();
 	virtual void refreshPosition(cocos2d::Vec2 camera_);
 	virtual void tick(World& world) = 0;
@@ -33,10 +34,10 @@ public:
 	//Ï¸°ûÖÜÆÚ
 	float cycle;
 protected:
-	cocos2d::Label* label;
+	float maxSpeed;
 	PerlinNoise noise;
+	cocos2d::Vec2 noiseOff;
 	DNA dna;
-	unsigned long long noiseX;
 	virtual void init(cocos2d::Layer& layer, int ZOrder) = 0;
 };
 #endif

@@ -1,59 +1,99 @@
 #include"PerlinNoise.h"
-/************************************************
-函数名:Noise
-功能:随机数发生器
-备注:未经过处理
-************************************************/
-double PerlinNoise::Noise(unsigned long long x)
+#include <algorithm>
+#include <numeric>
+double fade(double t) 
 {
-	x = (x << 13) ^ x;
-	return 1.0 - ((x * (x * x * seed + 789221) + 1376312589) & 0x7fffffff) / 1073741824.0 + 1;
+	return t * t * t * (t * (t * 6 - 15) + 10);
 }
-/************************************************
-函数名:smoothedNoise
-功能:平滑噪声(取平均值)
-备注:无
-************************************************/
-double PerlinNoise::smoothedNoise(double x)
+
+double lerp(double t, double a, double b) 
 {
-	return Noise(x) / 2 + Noise(x - 1) / 4 + Noise(x + 1) / 4;
+	return a + t * (b - a);
 }
-/************************************************
-函数名:interpolate
-功能:线性插值函数
-备注:无
-************************************************/
-double PerlinNoise::interpolate(double a, double b, double x)
+
+double grad(int hash, double x, double y, double z) 
 {
-	return a*(1 - x) + b*x;
+	int h = hash & 15;
+	double u = h < 8 ? x : y;
+	double v = h < 4 ? y : h == 12 || h == 14 ? x : z;
+	return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
 }
-/************************************************
-函数名:interpolatedNoise
-功能:插值噪声
-备注:无
-************************************************/
-double PerlinNoise::interpolatedNoise(double x)
+
+PerlinNoise::PerlinNoise(uint32_t seed) 
 {
-	int int_x = int(x);
-	double fractional_x = x - int_x;
-	double v1 = smoothedNoise(int_x);
-	double v2 = smoothedNoise(int_x + 1);
-	return interpolate(v1, v2, fractional_x);
+	auto mid_range = p.begin() + 256;
+
+	std::mt19937 engine(seed);
+
+	std::iota(p.begin(), mid_range, 0); //Generate sequential numbers in the lower half
+	std::shuffle(p.begin(), mid_range, engine); //Shuffle the lower half
+	std::copy(p.begin(), mid_range, mid_range); //Copy the lower half to the upper half
+												//p now has the numbers 0-255, shuffled, and duplicated
 }
-/************************************************
-函数名:perlin_noise
-功能:最终函数,传入x返回对应的y
-备注:无
-************************************************/
-double PerlinNoise::perlin_noise(double x)
+
+double PerlinNoise::noise(double x, double y, double z) const 
 {
-	double total = 0;
-	double freq = frequency;
-	double ampl = amplitude;
-	for (int i = 0; i <= 4; i++)
-	{
-		total += interpolatedNoise(x*freq)*ampl;
-		freq *= 2; ampl /= 2.0;
+
+	const int32_t X = static_cast<int32_t>(std::floor(x)) & 255;
+	const int32_t Y = static_cast<int32_t>(std::floor(y)) & 255;
+	const int32_t Z = static_cast<int32_t>(std::floor(z)) & 255;
+
+	x -= std::floor(x);
+	y -= std::floor(y);
+	z -= std::floor(z);
+
+	const double u = fade(x);
+	const double v = fade(y);
+	const double w = fade(z);
+
+	const auto A = p[X] + Y;
+	const auto AA = p[A] + Z;
+	const auto AB = p[A + 1] + Z;
+	const auto B = p[X + 1] + Y;
+	const auto BA = p[B] + Z;
+	const auto BB = p[B + 1] + Z;
+
+	const auto PAA = p[AA];
+	const auto PBA = p[BA];
+	const auto PAB = p[AB];
+	const auto PBB = p[BB];
+	const auto PAA1 = p[AA + 1];
+	const auto PBA1 = p[BA + 1];
+	const auto PAB1 = p[AB + 1];
+	const auto PBB1 = p[BB + 1];
+
+	const auto a = lerp(v,
+		lerp(u, grad(PAA, x, y, z), grad(PBA, x - 1, y, z)),
+		lerp(u, grad(PAB, x, y - 1, z), grad(PBB, x - 1, y - 1, z))
+		);
+
+	const auto b = lerp(v,
+		lerp(u, grad(PAA1, x, y, z - 1), grad(PBA1, x - 1, y, z - 1)),
+		lerp(u, grad(PAB1, x, y - 1, z - 1), grad(PBB1, x - 1, y - 1, z - 1))
+		);
+
+	return lerp(w, a, b);
+}
+
+PerlinOctave::PerlinOctave(int octaves, uint32_t seed) :
+	perlin_(seed),
+	octaves_(octaves) 
+{
+}
+
+double PerlinOctave::noise(double x, double y, double z) const 
+{
+	double result = 0.0;
+	double amp = 1.0;
+
+	int i = octaves_;
+	while (i--) {
+		result += perlin_.noise(x, y, z) * amp;
+		x *= 2.0;
+		y *= 2.0;
+		z *= 2.0;
+		amp *= 0.5;
 	}
-	return int(total * 5);
+
+	return result;
 }

@@ -30,13 +30,9 @@ void Gloop::init(Layer& layer, int ZOrder)
 	setColor(Color3B(0, 255, 0));
 	setRandomPosition(Vec2(0, 0), parameter::worldSize);
 	setSize(dna.getSize());
-	label = Label::createWithTTF("", "fonts/Marker Felt.ttf", 0.5*size.width);
-	layer.addChild(label, ZOrder + 1);
-	speed = speedCalcPrmA+size.width*speedCalcPrmB;
-	noise.seed = random<unsigned long long>(0ULL, ULLONG_MAX);
-	noise.amplitude = 1;
-	noise.frequency = 0.0025*(speed);
-	noiseX = 0;
+	maxSpeed = speedCalcPrmA+size.width*speedCalcPrmB;
+	noise = PerlinNoise(random<uint32_t>(0, UINT32_MAX));
+	noiseOff = Vec2(random<double>(0.0, 10000.0), random<double>(0.0, 10000.0));
 	die = false;
 	cycle = maxCycle*parameter::gloopStartCycleCoefficient;
 	bloopType = BloopType::gloop;
@@ -89,17 +85,20 @@ std::pair<double,double> Gloop::getNearestBloop(World& world)
 }
 void Gloop::move(World& world)
 {
-	double randomAngle = noise.perlin_noise(noiseX);
-	randomAngle -= (int(randomAngle / (2.0 * PI))) * 2.0 * PI;
+	Vec2 velocity = 
+	Vec2(
+		function::map(noise.noise(noiseOff.x += 0.003), -0.5f, 0.5f, -maxSpeed, maxSpeed),
+		function::map(noise.noise(noiseOff.y += 0.003), -0.5f, 0.5f, -maxSpeed, maxSpeed)
+	);
+	double deltaAngle = 0;
 	std::pair<double,double> nearestBloop = getNearestBloop(world);
 	std::vector<double> brainInput = { nearestBloop.first,nearestBloop.second};
 	brain.setAllInputs(brainInput);
 	brain.calculate();
-	double rad = brain.allOutputs()[0];
+	deltaAngle = brain.allOutputs()[0];
 	double speedPercent = brain.allOutputs()[1];
-	Vec2 deltaPosition = Vec2(cosf(randomAngle), sinf(randomAngle))*speed;//*speedPercent;
+	Vec2 deltaPosition = Vec2(cosf(deltaAngle), sinf(deltaAngle))*maxSpeed*speedPercent;
 	moveTo(getPosition() + deltaPosition, world);
-	noiseX++;
 }
 void Gloop::tick(World& world)
 {
@@ -152,10 +151,5 @@ Gloop::Gloop(Layer& layer, int ZOrder, Gloop& parentA, Gloop& parentB)
 void Gloop::refreshPosition(Vec2 camera_)
 {
 	sprite->setPosition(position - camera_);
-	label->setPosition(position - camera_);
-	std::string str;
-	std::ostringstream os;
-	os << (int)cycle;
-	str.append(os.str());
-	label->setString(str);
+	sprite->setOpacity(cycle / maxCycle* 255.0f);
 }

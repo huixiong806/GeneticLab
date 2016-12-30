@@ -9,3 +9,7 @@ double function::halfStep(double x)
 {
 	return x > 0 ? x : 0;
 }
+double function::map(double value, double srcMin, double srcMax, double dstMin, double dstMax)
+{
+	return	((value - srcMin)*(dstMax - dstMin) / (srcMax - srcMin)) + dstMin;
+}

@@ -37,5 +37,6 @@ namespace function
 {
 	double sigmoid(double x);
 	double halfStep(double x);
+	double map(double value, double srcMin, double srcMax, double dstMin, double dstMax);
 }
 #endif
