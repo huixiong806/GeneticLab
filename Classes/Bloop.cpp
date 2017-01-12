@@ -8,7 +8,7 @@ Bloop::~Bloop()
 }
 void Bloop::OutOfRangeCheck()
 {
-	Size& chunkSize = parameter::chunkSize;
+	Size chunkSize = const_parameter::chunkSize;
 	if (getPosition().x < chunkSize.width*0.5)setPosition(getPosition() + Vec2(parameter::worldSize.width, 0));
 	if (getPosition().x > parameter::worldSize.width + chunkSize.width*0.5)setPosition(getPosition() + Vec2(-parameter::worldSize.width, 0));
 	if (getPosition().y < chunkSize.height*0.5)setPosition(getPosition() + Vec2(0, parameter::worldSize.height));
@@ -52,10 +52,10 @@ void Bloop::removeFromChunk(Chunk& chunk)
 std::vector<Chunk*> Bloop::getNineNearByChunks(World& world)
 {
 	Vec2 position = this->getPosition();
-	if (position.x < 0)position.x += parameter::worldSize.width+ parameter::chunkSize.width;
-	if (position.y < 0)position.y += parameter::worldSize.height + parameter::chunkSize.height;
-	int indexX = position.x / parameter::chunkSize.width;
-	int indexY = position.y / parameter::chunkSize.height;
+	if (position.x < 0)position.x += parameter::worldSize.width+ const_parameter::chunkSize.width;
+	if (position.y < 0)position.y += parameter::worldSize.height + const_parameter::chunkSize.height;
+	int indexX = position.x / const_parameter::chunkSize.width;
+	int indexY = position.y / const_parameter::chunkSize.height;
 	std::vector<Chunk*> result;
 	for (int i = -1; i <= 1; ++i)
 	{

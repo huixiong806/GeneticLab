@@ -1,35 +1,43 @@
 #ifndef PUBLIC_VARS_H
 #define PUBLIC_VARS_H
-#include"cocos2d.h"
-#define PI 3.14159265358979
-#define E  2.71828182845905
+#include <unordered_set>
+#include "cocos2d.h"
+class Bloop;
+class Food;
+constexpr double MATH_PI = 3.14159265358979;
+constexpr double MATH_E = 2.71828182845905;
+using bloopPool = std::unordered_set<std::shared_ptr<Bloop>>;
+using foodPool = std::unordered_set<std::shared_ptr<Food>>;
+namespace const_parameter
+{	
+	extern const cocos2d::Size smallSize;
+	extern const cocos2d::Size mediumSize;
+	extern const cocos2d::Size largeSize;
+	extern const cocos2d::Size hugeSize;
+	extern const cocos2d::Size superHugeSize;
+	extern const cocos2d::Size chunkSize;
+}
 namespace parameter
 {
-	static cocos2d::Size smallSize = cocos2d::Size(512, 384);
-	static cocos2d::Size mediumSize = cocos2d::Size(1024, 768);
-	static cocos2d::Size largeSize = cocos2d::Size(2048, 1536);
-	static cocos2d::Size hugeSize = cocos2d::Size(4096, 3072);
-	static cocos2d::Size superHugeSize = cocos2d::Size(8192, 6144);
-	static cocos2d::Size chunkSize = cocos2d::Size(384, 384);
-	static const int gloopMinSize = 32;
-	static const int gloopSizeDNALength = 5;
-	static const int gloopBrainDNALength = 35;
-	static const int floopMinSize = 32;
-	static const int floopSizeDNALength = 8;
-	static const int floopBrainDNALength = 43;
-	static const int sloopMinSize = 128;
-	static const int sloopSizeDNALength = 8;
-	static const int sloopBrainDNALength = 35;
-	static float sunEnergyPerTick = 40.0f;//每tick流入生态系统的能量
-	static float energyTransferEfficiency = 0.3f;
+	extern int gloopMinSize;
+	extern int gloopSizeDNALength;
+	extern int gloopBrainDNALength;
+	extern int floopMinSize;
+	extern int floopSizeDNALength ;
+	extern int floopBrainDNALength;
+	extern int sloopMinSize;
+	extern int sloopSizeDNALength;
+	extern int sloopBrainDNALength;
+	extern float sunEnergyPerTick;//每tick流入生态系统的能量
+	extern float energyTransferEfficiency;
 	//初始cycle的系数,startCycle=startCycleCoefficient*maxCycle
-	static float gloopStartCycleCoefficient = 1.0f/4.0f;
-	static float floopStartCycleCoefficient = 1.0f/6.0f;
-	static float sloopStartCycleCoefficient = 1.0f/6.0f;
+	extern float gloopStartCycleCoefficient;
+	extern float floopStartCycleCoefficient;
+	extern float sloopStartCycleCoefficient;
 	//基因突变率
-	static float gloopGeneMutationRate = 0.02f;
-	static float floopGeneMutationRate = 0.02f;
-	static float sloopGeneMutationRate = 0.02f;
+	extern float gloopGeneMutationRate;
+	extern float floopGeneMutationRate;
+	extern float sloopGeneMutationRate;
 	extern cocos2d::Size worldSize;
 	extern cocos2d::Size chunkCount;
 }

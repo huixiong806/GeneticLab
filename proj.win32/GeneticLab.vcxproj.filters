@@ -108,9 +108,6 @@
     <ClInclude Include="..\Classes\Food.h">
       <Filter>src\Main</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Entity.h">
-      <Filter>src\Main</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\Chunk.h">
       <Filter>src\Main</Filter>
     </ClInclude>
@@ -127,6 +124,9 @@
       <Filter>src\NeuralNetwork</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Recorder.h">
+      <Filter>src\Main</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Entity.h">
       <Filter>src\Main</Filter>
     </ClInclude>
   </ItemGroup>

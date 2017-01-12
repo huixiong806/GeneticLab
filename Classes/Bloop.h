@@ -10,7 +10,7 @@ class World;
 class Chunk;
 enum class BloopType
 {
-	gloop,floop,sloop
+	gloop, floop, sloop
 };
 class Bloop :public Entity,std::enable_shared_from_this<Bloop>
 {

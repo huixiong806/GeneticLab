@@ -4,7 +4,8 @@ static Size designResolutionSize = Size(480, 320);
 static Size smallResolutionSize = Size(480, 320);
 static Size mediumResolutionSize = Size(1024, 768);
 static Size largeResolutionSize = Size(2048, 1536);
-AppDelegate::AppDelegate() {
+AppDelegate::AppDelegate() 
+{
 
 }
 

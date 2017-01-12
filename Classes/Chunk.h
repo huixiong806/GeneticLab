@@ -13,10 +13,10 @@ public:
 	void removeBloop(std::shared_ptr<Bloop> bloop_);
 	void addFood(std::shared_ptr<Food> food_);
 	void removeFood(std::shared_ptr<Food> food_);
-	std::unordered_set<std::shared_ptr<Bloop>>& bloopSet();
-	std::unordered_set<std::shared_ptr<Food>>& foodSet();
+	bloopPool& bloopSet();
+	foodPool& foodSet();
 private:
-	std::unordered_set<std::shared_ptr<Bloop>> bloop;
-	std::unordered_set<std::shared_ptr<Food>> food;
+	bloopPool bloop;
+	foodPool food;
 };
 #endif

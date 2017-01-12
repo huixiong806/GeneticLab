@@ -134,7 +134,7 @@ void Floop::move(World& world)
 	std::vector<double> allOutPuts = brain.allOutputs();
 	double rad = allOutPuts[0];
 	double speedPercent = allOutPuts[1];
-	Vec2 deltaPosition = Vec2(cosf(rad), sinf(rad))*3.0f*maxSpeed*speedPercent/(2.0f*PI);
+	Vec2 deltaPosition = Vec2(cosf(rad), sinf(rad))*3.0f*maxSpeed*speedPercent/(2.0f*MATH_PI);
 	cycle += cycleIncPerTick / 2 + speedPercent * cycleIncPerTick * 0.7;
 	moveTo(getPosition() + deltaPosition, world);
 	//noiseX++;

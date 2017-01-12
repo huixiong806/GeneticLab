@@ -72,8 +72,8 @@ void Entity::initSprite(Layer& layer, std::string picturePath, int ZOrder)
 Chunk& Entity::getChunk(World& world)
 {
 	Vec2 position = this->getPosition();
-	int indexX = position.x / parameter::chunkSize.width;
-	int indexY = position.y / parameter::chunkSize.height;
+	int indexX = position.x / const_parameter::chunkSize.width;
+	int indexY = position.y / const_parameter::chunkSize.height;
 	return world.chunk[indexX][indexY];
 }
 

@@ -1,6 +1,5 @@
 #include "HelloWorldScene.h"
 #include "Gloop.h"
-#include "Bloop.h"
 #include "Floop.h"
 #include "Sloop.h"
 #include "publicVars.h"
@@ -55,6 +54,7 @@ bool World::init()
 	camera = Vec2(0, 0);
 	for (int i = 0; i <= 3; i++)
 		keyGroupCamera[i] = false;
+	//初始化一堆其他的东西
 	keyListener = EventListenerKeyboard::create();
 	keyListener->setEnabled(true);
 	keyListener->onKeyReleased = CC_CALLBACK_2(World::onKeyReleased, this);
@@ -64,12 +64,12 @@ bool World::init()
 	backGround->setColor(Color3B::WHITE);
 	backGround->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	this->addChild(backGround, 0);
-	info = "KeyControl\nD:Zoom In\nF:Zoom Out\nX:Hide/Show information\nVersion1.5.3\ncopyright 2016~2017 orangebird.\nPublished with MIT licence.";
-	information = Label::createWithTTF(info,"fonts/Marker Felt.ttf", 60);
-	information->setColor(Color3B(104,209,255));
-	information->setPosition(origin + Vec2(visibleSize.width / 5.0*4.0, visibleSize.height / 4.0));
-	showInformation = true;
-	this->addChild(information,2);
+	infoString = "KeyControl\nD:Zoom In\nF:Zoom Out\nX:Hide/Show information\nVersion1.5.3\ncopyright 2016~2017 orangebird.\nPublished with MIT licence.";
+	infoLabel = Label::createWithTTF(infoString,"fonts/Marker Felt.ttf", 60);
+	infoLabel->setColor(Color3B(104,209,255));
+	infoLabel->setPosition(origin + Vec2(visibleSize.width / 5.0*4.0, visibleSize.height / 4.0));
+	infoVisible = true;
+	this->addChild(infoLabel,2);
 	recorder = Recorder();
 	recorder.setFrequency(500);
 	tick = 0;
@@ -93,31 +93,37 @@ void World::outputData()
 		bloopCount[(int)BloopType::sloop],
 	});
 	std::stringstream str;
-	str << "Tick:" << tick <<"\nLocation:"<<camera.x<<","<<camera.y<< "\nFood:"<< food.size() << "\nGloop:" << bloopCount[(int)BloopType::gloop] << " Floop:" << bloopCount[(int)BloopType::floop] << " Sloop:" << bloopCount[(int)BloopType::sloop] << '\n' << info;
-	information->setString(str.str());
+	str << "Tick:" << tick <<"\nLocation:"<<camera.x<<","<<camera.y<< "\nFood:"<< food.size() 
+		<< "\nGloop:" << bloopCount[(int)BloopType::gloop] << " Floop:" 
+		<< bloopCount[(int)BloopType::floop] << " Sloop:" << bloopCount[(int)BloopType::sloop] 
+		<< '\n' << infoString;
+	infoLabel->setString(str.str());
 }
+//设置地图大小(有多少个chunks)
 void World::setChunkCount(Size chunkCount)
 {
 	parameter::chunkCount = chunkCount;
-	parameter::worldSize.width = parameter::chunkSize.width * chunkCount.width;
-	parameter::worldSize.height = parameter::chunkSize.height * chunkCount.height;
+	parameter::worldSize.width = const_parameter::chunkSize.width * chunkCount.width;
+	parameter::worldSize.height = const_parameter::chunkSize.height * chunkCount.height;
 	chunk.resize(chunkCount.width+1);
 	for (auto &i : chunk)
 		i.resize(chunkCount.height+1);
 }
+//添加一个bloop
 void World::addBloop(std::shared_ptr<Bloop> bloop)
 {
 	this->bloop.insert(bloop);
 	bloop->addToChunk(bloop->getChunk(*this));
 	++bloopCount[(int)bloop->bloopType];
 }
-std::unordered_set<std::shared_ptr<Bloop>>::const_iterator 
-	World::eraseBloop(std::unordered_set<std::shared_ptr<Bloop>>::iterator target)
+//移除一个bloop
+bloopPool::const_iterator World::eraseBloop(bloopPool::iterator target)
 {
 	(*target)->removeFromChunk((*target)->getChunk(*this));
 	--bloopCount[(int)(*target)->bloopType];
 	return bloop.erase(target);
 }
+//事件处理器,1tick触发一次
 void World::eventProcessor(float dt)
 {
 	auto director = Director::getInstance();
@@ -184,8 +190,8 @@ void World::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 			glview->setDesignResolutionSize(curResolutionSize.width+512, curResolutionSize.height+384, ResolutionPolicy::NO_BORDER);
 		curResolutionSize = glview->getDesignResolutionSize();
 		backGround->setScale(curResolutionSize.width/backGround->getContentSize().width);
-		information->setScale(curResolutionSize.width / backGround->getContentSize().width);
-		information->setPosition(Vec2(curResolutionSize.width / 5.0*4.0, curResolutionSize.height / 4.0));
+		infoLabel->setScale(curResolutionSize.width / backGround->getContentSize().width);
+		infoLabel->setPosition(Vec2(curResolutionSize.width / 5.0*4.0, curResolutionSize.height / 4.0));
 		backGround->setPosition(curResolutionSize / 2);
 	}
 	else if (keyCode == EventKeyboard::KeyCode::KEY_D)  //D键，减小screensize
@@ -194,15 +200,15 @@ void World::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 			glview->setDesignResolutionSize(curResolutionSize.width-512, curResolutionSize.height-384, ResolutionPolicy::NO_BORDER);
 		curResolutionSize = glview->getDesignResolutionSize();
 		backGround->setScale(curResolutionSize.width / backGround->getContentSize().width);
-		information->setScale(curResolutionSize.width / backGround->getContentSize().width);
-		information->setPosition(Vec2(curResolutionSize.width / 5.0*4.0, curResolutionSize.height / 4.0));
+		infoLabel->setScale(curResolutionSize.width / backGround->getContentSize().width);
+		infoLabel->setPosition(Vec2(curResolutionSize.width / 5.0*4.0, curResolutionSize.height / 4.0));
 		backGround->setPosition(curResolutionSize / 2);
 	}
 	else if (keyCode == EventKeyboard::KeyCode::KEY_X)
 	{
-		if (showInformation)
-			showInformation = 0;
-		else  showInformation = 1;
-		information->setOpacity(showInformation?255:0);
+		if (infoVisible)
+			infoVisible = 0;
+		else  infoVisible = 1;
+		infoLabel->setOpacity(infoVisible ?255:0);
 	}
 }
