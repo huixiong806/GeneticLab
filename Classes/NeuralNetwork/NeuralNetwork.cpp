@@ -1,4 +1,4 @@
-#include "NeuralNetwork.h"
+#include <NeuralNetwork.h>
 using namespace std;
 NS_ANN_BEGIN
 NeuralNetwork::NeuralNetwork(){}

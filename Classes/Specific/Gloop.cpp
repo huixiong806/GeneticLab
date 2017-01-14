@@ -1,5 +1,5 @@
-#include "Gloop.h"
-#include "HelloWorldScene.h"
+#include <Gloop.h>
+#include <World.h>
 using namespace cocos2d;
 Gloop::~Gloop()
 {

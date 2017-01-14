@@ -1,4 +1,4 @@
-#include"publicVars.h"
+#include <Parameter.h>
 namespace const_parameter
 {
 	const cocos2d::Size smallSize(512, 384);

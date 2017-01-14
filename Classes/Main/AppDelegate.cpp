@@ -1,4 +1,4 @@
-#include "AppDelegate.h"
+#include <AppDelegate.h>
 using namespace cocos2d;
 static Size designResolutionSize = Size(480, 320);
 static Size smallResolutionSize = Size(480, 320);

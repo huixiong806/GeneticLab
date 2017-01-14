@@ -1,5 +1,5 @@
-#include "Sloop.h"
-#include "HelloWorldScene.h"
+#include <Sloop.h>
+#include <World.h>
 using namespace cocos2d;
 Sloop::~Sloop()
 {

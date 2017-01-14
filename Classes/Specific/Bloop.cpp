@@ -1,7 +1,7 @@
-#include "Bloop.h"
-#include "Chunk.h"
-#include "HelloWorldScene.h"
-#include "publicVars.h"
+#include <Bloop.h>
+#include <Chunk.h>
+#include <World.h>
+#include <Parameter.h>
 using namespace cocos2d;
 Bloop::~Bloop()
 {

@@ -1,7 +1,7 @@
 #ifndef ENTITY_H
 #define ENTITY_H
 #include "cocos2d.h"
-#include "publicVars.h"
+#include <Parameter.h>
 class World;
 class Chunk;
 enum class Shape : int

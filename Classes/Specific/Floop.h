@@ -1,7 +1,7 @@
 #ifndef FLOOP_H
 #define FLOOP_H
 #include "cocos2d.h"
-#include "Bloop.h"
+#include <Bloop.h>
 //Floop:初级消费者，以Gloop为食
 class Floop :public Bloop
 {

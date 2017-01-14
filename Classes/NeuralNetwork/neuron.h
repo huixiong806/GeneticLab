@@ -1,7 +1,7 @@
 #ifndef NEURON_H
 #define NEURON_H
-#include<vector>
-#include"Node.h"
+#include <vector>
+#include <Node.h>
 NS_ANN_BEGIN
 class Neuron:public Node
 {

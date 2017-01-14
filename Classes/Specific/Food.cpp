@@ -1,5 +1,5 @@
-#include "Food.h"
-#include "Chunk.h"
+#include <Food.h>
+#include <Chunk.h>
 using namespace cocos2d;
 Food::Food(Layer& layer, int ZOrder)
 {

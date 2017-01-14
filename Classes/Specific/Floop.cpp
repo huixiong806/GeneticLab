@@ -1,5 +1,5 @@
-#include "Floop.h"
-#include "HelloWorldScene.h"
+#include <Floop.h>
+#include <World.h>
 using namespace cocos2d;
 Floop::~Floop()
 {

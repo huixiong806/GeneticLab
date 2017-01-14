@@ -1,6 +1,6 @@
-#include "Entity.h"
-#include "Chunk.h"
-#include "HelloWorldScene.h"
+#include <Entity.h>
+#include <Chunk.h>
+#include <World.h>
 using namespace cocos2d;
 void Entity::setRandomColor()
 {

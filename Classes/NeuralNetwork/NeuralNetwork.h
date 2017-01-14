@@ -1,6 +1,6 @@
 #ifndef NEURALNETWORK_H
 #define NEURALNETWORK_H
-#include "neuron.h"
+#include <neuron.h>
 NS_ANN_BEGIN
 class NeuralNetwork
 {

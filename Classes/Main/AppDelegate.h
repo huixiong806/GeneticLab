@@ -2,8 +2,8 @@
 #define  _APP_DELEGATE_H_
 
 #include "cocos2d.h"
-#include "publicVars.h"
-#include "HelloWorldScene.h"
+#include <Parameter.h>
+#include <World.h>
 /**
 @brief    The cocos2d Application.
 

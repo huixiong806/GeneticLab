@@ -71,7 +71,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>$(EngineRoot)cocos\audio\include;$(EngineRoot)external;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)extensions;..\Classes;..;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EngineRoot)cocos\audio\include;$(EngineRoot)external;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)extensions;$(ProjectDir)..\Classes\Statistic;$(ProjectDir)..\Classes\Structure;$(ProjectDir)..\Classes\NeuralNetwork;$(ProjectDir)..\Classes\Specific;$(ProjectDir)..\Classes\Main;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;COCOS2D_DEBUG=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -113,7 +113,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile>
       <Optimization>MaxSpeed</Optimization>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <AdditionalIncludeDirectories>$(EngineRoot)cocos\audio\include;$(EngineRoot)external;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)extensions;..\Classes;..;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(EngineRoot)cocos\audio\include;$(EngineRoot)external;$(EngineRoot)external\chipmunk\include\chipmunk;$(EngineRoot)extensions;$(ProjectDir)..\Classes\Statistic;$(ProjectDir)..\Classes\Structure;$(ProjectDir)..\Classes\NeuralNetwork;$(ProjectDir)..\Classes\Specific;$(ProjectDir)..\Classes\Main;%(AdditionalIncludeDirectories);$(_COCOS_HEADER_WIN32_BEGIN);$(_COCOS_HEADER_WIN32_END)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USE_MATH_DEFINES;GL_GLEXT_PROTOTYPES;CC_ENABLE_CHIPMUNK_INTEGRATION=1;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -144,41 +144,41 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     </PreLinkEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Classes\AppDelegate.cpp" />
-    <ClCompile Include="..\Classes\Bloop.cpp" />
-    <ClCompile Include="..\Classes\Chunk.cpp" />
-    <ClCompile Include="..\Classes\DNA.cpp" />
-    <ClCompile Include="..\Classes\Entity.cpp" />
-    <ClCompile Include="..\Classes\Floop.cpp" />
-    <ClCompile Include="..\Classes\Food.cpp" />
-    <ClCompile Include="..\Classes\Gloop.cpp" />
-    <ClCompile Include="..\Classes\Recorder.cpp" />
-    <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
-    <ClCompile Include="..\Classes\NeuralNetwork.cpp" />
-    <ClCompile Include="..\Classes\neuron.cpp" />
-    <ClCompile Include="..\Classes\PerlinNoise.cpp" />
-    <ClCompile Include="..\Classes\publicVars.cpp" />
-    <ClCompile Include="..\Classes\Sloop.cpp" />
+    <ClCompile Include="..\Classes\Main\AppDelegate.cpp" />
+    <ClCompile Include="..\Classes\NeuralNetwork\NeuralNetwork.cpp" />
+    <ClCompile Include="..\Classes\NeuralNetwork\neuron.cpp" />
+    <ClCompile Include="..\Classes\Specific\Bloop.cpp" />
+    <ClCompile Include="..\Classes\Specific\Floop.cpp" />
+    <ClCompile Include="..\Classes\Specific\Food.cpp" />
+    <ClCompile Include="..\Classes\Specific\Gloop.cpp" />
+    <ClCompile Include="..\Classes\Specific\Sloop.cpp" />
+    <ClCompile Include="..\Classes\Statistic\Recorder.cpp" />
+    <ClCompile Include="..\Classes\Structure\Chunk.cpp" />
+    <ClCompile Include="..\Classes\Structure\DNA.cpp" />
+    <ClCompile Include="..\Classes\Structure\Entity.cpp" />
+    <ClCompile Include="..\Classes\Structure\Parameter.cpp" />
+    <ClCompile Include="..\Classes\Structure\PerlinNoise.cpp" />
+    <ClCompile Include="..\Classes\Structure\World.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Classes\AppDelegate.h" />
-    <ClInclude Include="..\Classes\Bloop.h" />
-    <ClInclude Include="..\Classes\Chunk.h" />
-    <ClInclude Include="..\Classes\DNA.h" />
-    <ClInclude Include="..\Classes\Entity.h" />
-    <ClInclude Include="..\Classes\Floop.h" />
-    <ClInclude Include="..\Classes\Food.h" />
-    <ClInclude Include="..\Classes\Functions.hpp" />
-    <ClInclude Include="..\Classes\Gloop.h" />
-    <ClInclude Include="..\Classes\Recorder.h" />
-    <ClInclude Include="..\Classes\HelloWorldScene.h" />
-    <ClInclude Include="..\Classes\NeuralNetwork.h" />
-    <ClInclude Include="..\Classes\neuron.h" />
-    <ClInclude Include="..\Classes\Node.h" />
-    <ClInclude Include="..\Classes\PerlinNoise.h" />
-    <ClInclude Include="..\Classes\publicVars.h" />
-    <ClInclude Include="..\Classes\Sloop.h" />
+    <ClInclude Include="..\Classes\Main\AppDelegate.h" />
+    <ClInclude Include="..\Classes\NeuralNetwork\NeuralNetwork.h" />
+    <ClInclude Include="..\Classes\NeuralNetwork\neuron.h" />
+    <ClInclude Include="..\Classes\NeuralNetwork\Node.h" />
+    <ClInclude Include="..\Classes\Specific\Bloop.h" />
+    <ClInclude Include="..\Classes\Specific\Floop.h" />
+    <ClInclude Include="..\Classes\Specific\Food.h" />
+    <ClInclude Include="..\Classes\Specific\Gloop.h" />
+    <ClInclude Include="..\Classes\Specific\Sloop.h" />
+    <ClInclude Include="..\Classes\Statistic\Recorder.h" />
+    <ClInclude Include="..\Classes\Structure\Chunk.h" />
+    <ClInclude Include="..\Classes\Structure\DNA.h" />
+    <ClInclude Include="..\Classes\Structure\Entity.h" />
+    <ClInclude Include="..\Classes\Structure\Function.hpp" />
+    <ClInclude Include="..\Classes\Structure\Parameter.h" />
+    <ClInclude Include="..\Classes\Structure\PerlinNoise.h" />
+    <ClInclude Include="..\Classes\Structure\World.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>

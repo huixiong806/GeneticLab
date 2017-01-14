@@ -1,11 +1,11 @@
 #ifndef BLOOP_H
 #define BLOOP_H
 #include "cocos2d.h"
-#include "Entity.h"
-#include "DNA.h"
-#include "PerlinNoise.h"
-#include "Food.h"
-#include "NeuralNetwork.h"
+#include <Entity.h>
+#include <DNA.h>
+#include <PerlinNoise.h>
+#include <Food.h>
+#include <NeuralNetwork.h>
 class World;
 class Chunk;
 enum class BloopType

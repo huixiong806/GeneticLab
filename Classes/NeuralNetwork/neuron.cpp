@@ -1,4 +1,4 @@
-#include "neuron.h"
+#include <neuron.h>
 #include <cstdlib>
 #define RANDNUM (rand()/(double)RAND_MAX)*2.0-1.0
 using namespace std;

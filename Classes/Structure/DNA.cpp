@@ -1,4 +1,4 @@
-#include "DNA.h"
+#include <DNA.h>
 DNA::DNA(int SizeDNALength, int BrainDNALength,int MinSize)
 {
 	sizeDNALength = SizeDNALength;

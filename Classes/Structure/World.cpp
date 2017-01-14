@@ -1,8 +1,8 @@
-#include "HelloWorldScene.h"
-#include "Gloop.h"
-#include "Floop.h"
-#include "Sloop.h"
-#include "publicVars.h"
+#include <World.h>
+#include <Gloop.h>
+#include <Floop.h>
+#include <Sloop.h>
+#include <Parameter.h>
 USING_NS_CC;
 Scene* World::createScene()
 {

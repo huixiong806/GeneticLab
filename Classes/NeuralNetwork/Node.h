@@ -1,8 +1,8 @@
 #ifndef NODE_H
 #define NODE_H
-#include<vector>
-#include<memory>
-#include"Functions.hpp"
+#include <vector>
+#include <memory>
+#include <Function.hpp>
 NS_ANN_BEGIN
 class Node
 {

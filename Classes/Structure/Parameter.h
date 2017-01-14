@@ -1,5 +1,5 @@
-#ifndef PUBLIC_VARS_H
-#define PUBLIC_VARS_H
+#ifndef PARAMETER_H
+#define PARAMETER_H
 #include <unordered_set>
 #include "cocos2d.h"
 class Bloop;

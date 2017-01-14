@@ -8,68 +8,71 @@
       <UniqueIdentifier>{715254bc-d70b-4ec5-bf29-467dd3ace079}</UniqueIdentifier>
     </Filter>
     <Filter Include="src">
-      <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
+      <UniqueIdentifier>{561b7774-7d07-45ba-89b1-fda230f42bf9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\Bloop">
-      <UniqueIdentifier>{387c1fca-db2b-4378-acc3-72e5701212cc}</UniqueIdentifier>
+    <Filter Include="src\Statistic">
+      <UniqueIdentifier>{1cab7f44-dab6-4550-8e86-d2bfc996d0a8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\DNA">
-      <UniqueIdentifier>{d168ecc9-9155-4d6e-86cd-dce1d50be00d}</UniqueIdentifier>
+    <Filter Include="src\Structure">
+      <UniqueIdentifier>{7faf74c7-c183-4e4e-926a-920cc035037a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Specific">
+      <UniqueIdentifier>{80b9434d-54fd-4835-b43c-47d2c740dc00}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\NeuralNetwork">
-      <UniqueIdentifier>{04695bbd-2aad-4215-bab4-ec3b817625aa}</UniqueIdentifier>
+      <UniqueIdentifier>{966a0296-ddfd-4de0-8368-24a4128229f0}</UniqueIdentifier>
     </Filter>
     <Filter Include="src\Main">
-      <UniqueIdentifier>{70afc206-5dbe-454d-a07d-1cd4caad4f44}</UniqueIdentifier>
+      <UniqueIdentifier>{6c4571a8-2d06-41c5-b1ae-f1c7e3fd56b1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>win32</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Bloop.cpp">
-      <Filter>src\Bloop</Filter>
+    <ClCompile Include="..\Classes\Specific\Bloop.cpp">
+      <Filter>src\Specific</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Floop.cpp">
-      <Filter>src\Bloop</Filter>
+    <ClCompile Include="..\Classes\Specific\Floop.cpp">
+      <Filter>src\Specific</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Gloop.cpp">
-      <Filter>src\Bloop</Filter>
+    <ClCompile Include="..\Classes\Specific\Food.cpp">
+      <Filter>src\Specific</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\DNA.cpp">
-      <Filter>src\DNA</Filter>
+    <ClCompile Include="..\Classes\Specific\Gloop.cpp">
+      <Filter>src\Specific</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Sloop.cpp">
-      <Filter>src\Bloop</Filter>
+    <ClCompile Include="..\Classes\Statistic\Recorder.cpp">
+      <Filter>src\Statistic</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\AppDelegate.cpp">
-      <Filter>src\Main</Filter>
+    <ClCompile Include="..\Classes\Structure\Chunk.cpp">
+      <Filter>src\Structure</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\publicVars.cpp">
-      <Filter>src\Main</Filter>
+    <ClCompile Include="..\Classes\Structure\Entity.cpp">
+      <Filter>src\Structure</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\PerlinNoise.cpp">
-      <Filter>src\Main</Filter>
+    <ClCompile Include="..\Classes\Structure\DNA.cpp">
+      <Filter>src\Structure</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\HelloWorldScene.cpp">
-      <Filter>src\Main</Filter>
+    <ClCompile Include="..\Classes\Structure\Parameter.cpp">
+      <Filter>src\Structure</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Food.cpp">
-      <Filter>src\Main</Filter>
+    <ClCompile Include="..\Classes\Structure\PerlinNoise.cpp">
+      <Filter>src\Structure</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Entity.cpp">
-      <Filter>src\Main</Filter>
+    <ClCompile Include="..\Classes\Specific\Sloop.cpp">
+      <Filter>src\Specific</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Chunk.cpp">
-      <Filter>src\Main</Filter>
+    <ClCompile Include="..\Classes\Structure\World.cpp">
+      <Filter>src\Structure</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\NeuralNetwork.cpp">
+    <ClCompile Include="..\Classes\NeuralNetwork\NeuralNetwork.cpp">
       <Filter>src\NeuralNetwork</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\neuron.cpp">
+    <ClCompile Include="..\Classes\NeuralNetwork\neuron.cpp">
       <Filter>src\NeuralNetwork</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\Recorder.cpp">
+    <ClCompile Include="..\Classes\Main\AppDelegate.cpp">
       <Filter>src\Main</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,56 +80,56 @@
     <ClInclude Include="main.h">
       <Filter>win32</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Bloop.h">
-      <Filter>src\Bloop</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Floop.h">
-      <Filter>src\Bloop</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Gloop.h">
-      <Filter>src\Bloop</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\DNA.h">
-      <Filter>src\DNA</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Sloop.h">
-      <Filter>src\Bloop</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="..\Classes\publicVars.h">
-      <Filter>src\Main</Filter>
+    <ClInclude Include="..\Classes\Specific\Bloop.h">
+      <Filter>src\Specific</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\AppDelegate.h">
-      <Filter>src\Main</Filter>
+    <ClInclude Include="..\Classes\Specific\Floop.h">
+      <Filter>src\Specific</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\PerlinNoise.h">
-      <Filter>src\Main</Filter>
+    <ClInclude Include="..\Classes\Specific\Food.h">
+      <Filter>src\Specific</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\HelloWorldScene.h">
-      <Filter>src\Main</Filter>
+    <ClInclude Include="..\Classes\Specific\Gloop.h">
+      <Filter>src\Specific</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Food.h">
-      <Filter>src\Main</Filter>
+    <ClInclude Include="..\Classes\Statistic\Recorder.h">
+      <Filter>src\Statistic</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Chunk.h">
-      <Filter>src\Main</Filter>
+    <ClInclude Include="..\Classes\Structure\Chunk.h">
+      <Filter>src\Structure</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\NeuralNetwork.h">
+    <ClInclude Include="..\Classes\Structure\Entity.h">
+      <Filter>src\Structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Structure\DNA.h">
+      <Filter>src\Structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Structure\Parameter.h">
+      <Filter>src\Structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Structure\PerlinNoise.h">
+      <Filter>src\Structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Specific\Sloop.h">
+      <Filter>src\Specific</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Structure\World.h">
+      <Filter>src\Structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\Structure\Function.hpp">
+      <Filter>src\Structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\NeuralNetwork\NeuralNetwork.h">
       <Filter>src\NeuralNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\neuron.h">
+    <ClInclude Include="..\Classes\NeuralNetwork\neuron.h">
       <Filter>src\NeuralNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Node.h">
+    <ClInclude Include="..\Classes\NeuralNetwork\Node.h">
       <Filter>src\NeuralNetwork</Filter>
     </ClInclude>
-    <ClInclude Include="..\Classes\Functions.hpp">
-      <Filter>src\NeuralNetwork</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Recorder.h">
-      <Filter>src\Main</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\Entity.h">
+    <ClInclude Include="..\Classes\Main\AppDelegate.h">
       <Filter>src\Main</Filter>
     </ClInclude>
   </ItemGroup>

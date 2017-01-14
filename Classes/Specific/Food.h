@@ -1,7 +1,7 @@
 #ifndef FOOD_H
 #define FOOD_H
 #include "cocos2d.h"
-#include "Entity.h"
+#include <Entity.h>
 class World;
 class Chunk;
 class Food:public Entity
