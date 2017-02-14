@@ -9,3 +9,4 @@ proj.android-studio/
 proj.win32/Release.win32/
 *.suo
 *.sdf
+*.db

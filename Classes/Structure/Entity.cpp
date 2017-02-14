@@ -38,7 +38,8 @@ void Entity::refreshPosition(Vec2 camera_)
 void Entity::setSize(Size size_)
 {
 	size = size_;
-	sprite->setScale(size.width/100.0,size.height/100.0);
+	if (sprite != nullptr)
+		sprite->setScale(size.width/100.0,size.height/100.0);
 }
 void Entity::setShape(Shape shape_)
 {
@@ -61,12 +62,17 @@ Entity::Entity()
 }
 Entity::~Entity()
 {
-	sprite->removeFromParent();
+	if(sprite!=nullptr)
+		sprite->removeFromParent();
 }
 void Entity::initSprite(Layer& layer, std::string picturePath, int ZOrder)
 {
 	sprite = Sprite::create(picturePath);
 	layer.addChild(sprite, ZOrder);
+}
+void Entity::setAbstract()
+{
+	sprite = nullptr;
 }
 //获取所在的chunk的引用
 Chunk& Entity::getChunk(World& world)
@@ -77,3 +83,25 @@ Chunk& Entity::getChunk(World& world)
 	return world.chunk[indexX][indexY];
 }
 
+//获取临近的9个chunks
+std::vector<Chunk*> Entity::getNineNearByChunks(World& world)
+{
+	if (position.x < 0)position.x += parameter::worldSize.width + const_parameter::chunkSize.width;
+	if (position.y < 0)position.y += parameter::worldSize.height + const_parameter::chunkSize.height;
+	int indexX = position.x / const_parameter::chunkSize.width;
+	int indexY = position.y / const_parameter::chunkSize.height;
+	std::vector<Chunk*> result;
+	for (int i = -1; i <= 1; ++i)
+	{
+		for (int j = -1; j <= 1; ++j)
+		{
+			int targetX = indexX + i, targetY = indexY + j;
+			if (targetX < 0)targetX += parameter::chunkCount.width + 1;
+			if (targetX >= parameter::chunkCount.width + 1)targetX -= parameter::chunkCount.width + 1;
+			if (targetY < 0)targetY += parameter::chunkCount.height + 1;
+			if (targetY >= parameter::chunkCount.height + 1)targetY -= parameter::chunkCount.height + 1;
+			result.push_back(&world.chunk[(int)targetX][(int)targetY]);
+		}
+	}
+	return result;
+}

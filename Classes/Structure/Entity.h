@@ -21,6 +21,8 @@ public:
 	void setSize(cocos2d::Size size_);
 	void setShape(Shape shape_);
 	void setPosition(cocos2d::Vec2 position_);
+	void setAbstract();
+	std::vector<Chunk*> getNineNearByChunks(World& world);
 	//virtual void moveTo(cocos2d::Vec2 newPosition, World& world) = 0;
 	virtual void refreshPosition(cocos2d::Vec2 camera_);
 	virtual bool hit(Entity& another);

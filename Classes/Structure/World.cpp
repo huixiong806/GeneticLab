@@ -51,7 +51,7 @@ bool World::init()
 		else 
 			addBloop(std::make_shared<Gloop>(*this, 1));
 	}
-	camera = Vec2(0, 0);
+	camera = Vec2(2048,2048);
 	for (int i = 0; i <= 3; i++)
 		keyGroupCamera[i] = false;
 	//初始化一堆其他的东西
@@ -60,11 +60,17 @@ bool World::init()
 	keyListener->onKeyReleased = CC_CALLBACK_2(World::onKeyReleased, this);
 	keyListener->onKeyPressed = CC_CALLBACK_2(World::onKeyPressed, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener, this);
+	touchListener = EventListenerTouchOneByOne::create();
+	touchListener->setEnabled(true);
+	touchListener->onTouchBegan = CC_CALLBACK_2(World::onTouchBegan, this);
+	touchListener->onTouchEnded = CC_CALLBACK_2(World::onTouchEnded, this);
+	touchListener->setSwallowTouches(true);
+	_eventDispatcher->addEventListenerWithSceneGraphPriority(touchListener, this);
 	backGround = Sprite::create("images\\White.png");
 	backGround->setColor(Color3B::WHITE);
 	backGround->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 	this->addChild(backGround, 0);
-	infoString = "KeyControl\nD:Zoom In\nF:Zoom Out\nX:Hide/Show information\nVersion1.5.3\ncopyright 2016~2017 orangebird.\nPublished with MIT licence.";
+	infoString = "KeyControl\nD:Zoom In\nF:Zoom Out\nX:Hide/Show information\nVersion1.5.4\ncopyright 2016-2017 orangebird.";
 	infoLabel = Label::createWithTTF(infoString,"fonts/Marker Felt.ttf", 60);
 	infoLabel->setColor(Color3B(104,209,255));
 	infoLabel->setPosition(origin + Vec2(visibleSize.width / 5.0*4.0, visibleSize.height / 4.0));
@@ -73,6 +79,7 @@ bool World::init()
 	recorder = Recorder();
 	recorder.setFrequency(500);
 	tick = 0;
+	trackedBloop = nullptr;
 	schedule(schedule_selector(World::eventProcessor), 0.02f);
     return true;
 }
@@ -93,7 +100,8 @@ void World::outputData()
 		bloopCount[(int)BloopType::sloop],
 	});
 	std::stringstream str;
-	str << "Tick:" << tick <<"\nLocation:"<<camera.x<<","<<camera.y<< "\nFood:"<< food.size() 
+	str << "Tick:" << tick << "\nLocation:" << camera.x << "," << camera.y << std::endl << (trackedBloop != nullptr ? "Flowing mode" : "Free mode")
+		<<"\nFood:"<< food.size() 
 		<< "\nGloop:" << bloopCount[(int)BloopType::gloop] << " Floop:" 
 		<< bloopCount[(int)BloopType::floop] << " Sloop:" << bloopCount[(int)BloopType::sloop] 
 		<< '\n' << infoString;
@@ -128,12 +136,18 @@ void World::eventProcessor(float dt)
 {
 	auto director = Director::getInstance();
 	auto glview = director->getOpenGLView();
+	Size visibleSize = Director::getInstance()->getVisibleSize();
 	const Vec2 deltaPos[4] = { Vec2(0,1),Vec2(0,-1), Vec2(-1,0), Vec2(1,0) };
 	//增加tick
 	++tick;
 	//移动视野
-	for (int i = 0; i <= 3; i++)
-		if (keyGroupCamera[i])camera += deltaPos[i]*(int)(glview->getDesignResolutionSize().width/204.8*1.2);
+	if (trackedBloop!=nullptr&&trackedBloop->die)trackedBloop = nullptr;
+	if (trackedBloop == nullptr)
+	{
+		for (int i = 0; i <= 3; i++)
+			if (keyGroupCamera[i])camera += deltaPos[i] * (int)(glview->getDesignResolutionSize().width / 204.8*1.2);
+	}
+	else camera = trackedBloop->getPosition() - visibleSize / 2;
 	//清除死亡的bloop
 	for (auto iter = bloop.begin(); iter != bloop.end();)
 	{
@@ -150,6 +164,7 @@ void World::eventProcessor(float dt)
 	//数据统计输出,500ticks进行一次
 	outputData();
 }
+
 /************************************************
 函数名:键盘释放事件
 功能:键盘释放时触发，执行一系列动作
@@ -211,4 +226,29 @@ void World::onKeyPressed(EventKeyboard::KeyCode keyCode, Event* event)
 		else  infoVisible = 1;
 		infoLabel->setOpacity(infoVisible ?255:0);
 	}
+}
+
+bool World::onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event)
+{
+	Entity mouse = Entity();
+	mouse.setAbstract();
+	mouse.setSize(Size(15, 15));
+	mouse.setPosition(touch->getLocation()+ camera);
+	std::vector<Chunk*> nearByChunks = mouse.getNineNearByChunks(*this);
+	for (auto& chunk : nearByChunks)
+	{
+		for (auto& bloop : chunk->bloopSet())
+		{
+			if (bloop->hit(mouse))
+			{
+				trackedBloop = bloop;
+				return true;
+			}
+		}
+	}
+	trackedBloop = nullptr;
+	return true;
+}
+void World::onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * event)
+{
 }

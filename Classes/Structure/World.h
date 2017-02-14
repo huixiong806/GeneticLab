@@ -32,6 +32,8 @@ private:
 	void setChunkCount(cocos2d::Size chunkCount);
 	//°´¼ü¼àÌýÆ÷
 	cocos2d::EventListenerKeyboard* keyListener;
+	//µ¥µã´¥Ãþ¼àÌýÆ÷
+	cocos2d::EventListenerTouchOneByOne *touchListener;
 	cocos2d::Sprite* backGround;
 	cocos2d::Label* infoLabel;
 	bool infoVisible;
@@ -44,9 +46,12 @@ private:
 	bloopPool bloop;
 	foodPool food;
 	std::vector<std::vector<Chunk>> chunk;
+	std::shared_ptr<Bloop> trackedBloop;
 	bloopPool::const_iterator eraseBloop(bloopPool::iterator target);
-	virtual void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
-	virtual void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+	void onTouchEnded(cocos2d::Touch * touch, cocos2d::Event * event);
+	bool onTouchBegan(cocos2d::Touch* touch, cocos2d::Event* event);
+	void onKeyReleased(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
+	void onKeyPressed(cocos2d::EventKeyboard::KeyCode keyCode, cocos2d::Event* event);
 }; 
 
 #endif // __HELLOWORLD_SCENE_H__

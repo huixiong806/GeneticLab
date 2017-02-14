@@ -27,8 +27,6 @@ public:
 	virtual void removeFromChunk(Chunk& chunk);
 	//移动到某个位置
 	virtual void moveTo(cocos2d::Vec2 newPosition, World& world);
-	//获取临近的9个chunk
-	virtual std::vector<Chunk*> getNineNearByChunks(World& world);
 	bool die;
 	BloopType bloopType;
 	//细胞周期

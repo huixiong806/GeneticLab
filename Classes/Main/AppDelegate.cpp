@@ -6,7 +6,6 @@ static Size mediumResolutionSize = Size(1024, 768);
 static Size largeResolutionSize = Size(2048, 1536);
 AppDelegate::AppDelegate() 
 {
-
 }
 
 AppDelegate::~AppDelegate() 
